@@ -34,3 +34,6 @@ DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 SSH_HOST = os.getenv("SSH_HOST", "")
 SSH_USER = os.getenv("SSH_USER", "")
 SSH_PASSWORD = os.getenv("SSH_PASSWORD", "")
+
+# Bot Administratori
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "Javohir_Hojibayev")

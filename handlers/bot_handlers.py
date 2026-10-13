@@ -9,6 +9,7 @@ from services.data_manager import DataManager
 from services.user_prefs import get_user_lang, set_user_lang
 from utils.pdf_generator import generate_employees_pdf
 from utils.locales import t, LANGUAGES
+import config
 
 logger = logging.getLogger(__name__)
 
@@ -279,7 +280,43 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     def btn_lang_prompt(message: Message):
         send_language_prompt(bot, message.chat.id)
 
-    # Callback handler (Til tanlash, Pagination & PDF)
+    # 👑 /admin (Faqat Javohir Hojibayev uchun maxsus boshqaruv)
+    @bot.message_handler(commands=['admin'])
+    def cmd_admin(message: Message):
+        user = message.from_user
+        username = (user.username or "").lower()
+        target_admin = config.ADMIN_USERNAME.lower()
+
+        if username != target_admin:
+            bot.send_message(
+                message.chat.id,
+                f"⛔ *Ruxsat berilmagan!*\nBu bo'lim faqat bot administratori (@{config.ADMIN_USERNAME}) uchun.",
+                parse_mode="Markdown"
+            )
+            return
+
+        users_count = len(data_manager.get_users())
+        markup = InlineKeyboardMarkup()
+        markup.add(
+            InlineKeyboardButton("🔄 Server bilan sinxronlash (Sync Now)", callback_data="admin_sync")
+        )
+        markup.add(
+            InlineKeyboardButton("📊 Baza holati va statistika", callback_data="admin_stats")
+        )
+
+        admin_text = (
+            f"👑 *BOSH ADMINISTRATOR PANELI*\n\n"
+            f"Assalomu alaykum, *Javohir Hojibayev*!\n\n"
+            f"📊 *Tizim holati:*\n"
+            f"• Xodimlar soni: *{users_count}* nafar\n"
+            f"• Pochta serveri: `192.168.0.105`\n"
+            f"• Auto-Sync: *Faol (har 5 daqiqada)*\n"
+            f"• Bot holati: *Online*\n\n"
+            f"Kerakli amalni tanlang 👇"
+        )
+        bot.send_message(message.chat.id, admin_text, parse_mode="Markdown", reply_markup=markup)
+
+    # Callback handler (Til tanlash, Pagination, PDF & Admin)
     @bot.callback_query_handler(func=lambda call: True)
     def handle_callbacks(call: CallbackQuery):
         data = call.data
@@ -287,6 +324,35 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
 
         if data == "noop":
             bot.answer_callback_query(call.id)
+            return
+
+        # Admin amallari
+        if data == "admin_sync":
+            if (call.from_user.username or "").lower() != config.ADMIN_USERNAME.lower():
+                bot.answer_callback_query(call.id, "Ruxsat yo'q!")
+                return
+            bot.answer_callback_query(call.id, "Sinxronizatsiya boshlandi...")
+            success = data_manager.refresh_from_db()
+            count = len(data_manager.get_users())
+            if success:
+                bot.send_message(chat_id, f"✅ Server bilan muvaffaqiyatli sinxronlandi!\nJami xodimlar: *{count}* nafar", parse_mode="Markdown")
+            else:
+                bot.send_message(chat_id, "⚠️ Sinxronizatsiyada ogohlantirish bo'ldi, keshdagi ma'lumotlar saqlab qolindi.")
+            return
+
+        if data == "admin_stats":
+            count = len(data_manager.get_users())
+            bot.answer_callback_query(call.id, f"Xodimlar: {count}")
+            bot.send_message(
+                chat_id,
+                f"📈 *Batafsil statistika:*\n"
+                f"• Jami korporativ pochta: *{count}* ta\n"
+                f"• Rasmiy domen: `@uz-potash.uz`\n"
+                f"• Boshqaruv serveri: `192.168.0.105` (vmail)\n"
+                f"• SSH ulanishi: *Muvaffaqiyatli*\n"
+                f"• Bosh administrator: *@Javohir_Hojibayev*",
+                parse_mode="Markdown"
+            )
             return
 
         # 1. Til tanlash
