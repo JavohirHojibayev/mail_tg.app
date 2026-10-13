@@ -76,6 +76,12 @@ TEXTS = {
             "👥 Jami: *{count}* nafar xodim\n"
             "🌐 Rasmiy domen: `@uz-potash.uz`"
         ),
+        "pdf_search_caption": (
+            "📄 *Qidiruv natijalari bo'yicha ma'lumotnoma*\n\n"
+            "🔍 Qidiruv: *\"{query}\"*\n"
+            "👥 Topilgan xodimlar: *{count}* nafar\n"
+            "🌐 Rasmiy domen: `@uz-potash.uz`"
+        ),
         "contact_javohir": "💬 Javohir Hojibayev (Telegram)",
         "contact_nurbek": "💬 Nurbek Jumayev (Telegram)",
         "cmd_list": "📋 Xodimlar ro'yxati (10 tadan)",
@@ -150,6 +156,12 @@ TEXTS = {
         "pdf_caption": (
             "📄 *DKZ AJ mail xodimlar ro'yxati*\n\n"
             "👥 Всего сотрудников: *{count}*\n"
+            "🌐 Официальный домен: `@uz-potash.uz`"
+        ),
+        "pdf_search_caption": (
+            "📄 *Справка по результатам поиска*\n\n"
+            "🔍 Запрос: *\"{query}\"*\n"
+            "👥 Найдено сотрудников: *{count}*\n"
             "🌐 Официальный домен: `@uz-potash.uz`"
         ),
         "contact_javohir": "💬 Javohir Hojibayev (Telegram)",

@@ -1,5 +1,7 @@
 import logging
 import math
+import time
+import uuid
 from telebot import TeleBot
 from telebot.types import (
     Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton,
@@ -117,7 +119,88 @@ def format_user_card(user: dict, lang: str = "uz") -> str:
     email = user.get("email", "Mavjud emas")
     return t("user_card", lang, name=name, email=email)
 
-def send_pdf_document(bot: TeleBot, chat_id: int, users: list, lang: str = "uz"):
+SEARCH_SESSIONS: dict = {}
+USER_LAST_SEARCH: dict = {}
+MAX_SEARCH_SESSIONS = 500
+
+def save_search_session(chat_id: int, query: str, users: list) -> str:
+    sid = uuid.uuid4().hex[:8]
+    if len(SEARCH_SESSIONS) > MAX_SEARCH_SESSIONS:
+        sorted_keys = sorted(SEARCH_SESSIONS.keys(), key=lambda k: SEARCH_SESSIONS[k].get("time", 0))
+        for k in sorted_keys[:100]:
+            SEARCH_SESSIONS.pop(k, None)
+    session_data = {
+        "chat_id": chat_id,
+        "query": query,
+        "users": users,
+        "time": time.time()
+    }
+    SEARCH_SESSIONS[sid] = session_data
+    USER_LAST_SEARCH[chat_id] = session_data
+    return sid
+
+def get_search_session(sid: str, chat_id: int) -> dict:
+    if sid and sid in SEARCH_SESSIONS:
+        return SEARCH_SESSIONS[sid]
+    if chat_id in USER_LAST_SEARCH:
+        return USER_LAST_SEARCH[chat_id]
+    return None
+
+def build_search_pagination_text_and_markup(
+    query: str, users: list, page: int, sid: str, lang: str = "uz"
+):
+    total_users = len(users)
+    total_pages = max(1, math.ceil(total_users / PAGE_SIZE))
+    page = max(0, min(page, total_pages - 1))
+
+    start_idx = page * PAGE_SIZE
+    end_idx = min(start_idx + PAGE_SIZE, total_users)
+    page_users = users[start_idx:end_idx]
+
+    safe_query = query.replace("*", "").replace("_", "").replace("`", "")
+    header = t("search_found_multiple", lang, query=safe_query, count=total_users).rstrip()
+
+    lines = [header]
+    if total_pages > 1:
+        lines.append(t("pagination_page_info", lang, page=page + 1, total_pages=total_pages, total_users=total_users).strip())
+    lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+
+    for idx, u in enumerate(page_users, start=start_idx + 1):
+        name = (u.get("name") or u.get("email", "").split("@")[0]).replace("*", "")
+        email = u.get("email", "").replace("`", "")
+        lines.append(f"*{idx}.* 👤 *{name}*\n     📧 `{email}`\n")
+
+    lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    lines.append(t("pagination_footer", lang))
+
+    text = "\n".join(lines)
+
+    markup = InlineKeyboardMarkup()
+    if total_pages > 1:
+        nav_row = []
+        if page > 0:
+            nav_row.append(InlineKeyboardButton(t("btn_prev", lang), callback_data=f"spg:{sid}:{page-1}"))
+        else:
+            nav_row.append(InlineKeyboardButton("⏹", callback_data="noop"))
+
+        nav_row.append(InlineKeyboardButton(f"📄 {page+1} / {total_pages}", callback_data="noop"))
+
+        if page < total_pages - 1:
+            nav_row.append(InlineKeyboardButton(t("btn_next", lang), callback_data=f"spg:{sid}:{page+1}"))
+        else:
+            nav_row.append(InlineKeyboardButton("⏹", callback_data="noop"))
+
+        markup.row(*nav_row)
+
+    # Faqat ushbu qidiruv natijalari uchun PDF tugmasi
+    pdf_btn_text = f"{t('btn_results_pdf', lang)} ({total_users})"
+    markup.add(
+        InlineKeyboardButton(pdf_btn_text, callback_data=f"spdf:{sid}")
+    )
+
+    return text, markup
+
+def send_pdf_document(bot: TeleBot, chat_id: int, users: list, lang: str = "uz", query: str = None):
     wait_msg = bot.send_message(
         chat_id,
         t("pdf_wait", lang),
@@ -125,12 +208,19 @@ def send_pdf_document(bot: TeleBot, chat_id: int, users: list, lang: str = "uz")
         reply_markup=get_main_keyboard(lang)
     )
     try:
-        pdf_path = generate_employees_pdf(users)
+        if query:
+            pdf_title = f"DKZ AJ mail xodimlar ro'yxati (Qidiruv: {query})" if lang == "uz" else f"Список сотрудников АО «ДКЗ» (Поиск: {query})"
+            caption = t("pdf_search_caption", lang, query=query, count=len(users))
+        else:
+            pdf_title = "DKZ AJ mail xodimlar ro'yxati" if lang == "uz" else "Список сотрудников АО «ДКЗ»"
+            caption = t("pdf_caption", lang, count=len(users))
+
+        pdf_path = generate_employees_pdf(users, title=pdf_title)
         with open(pdf_path, "rb") as f:
             bot.send_document(
                 chat_id,
                 f,
-                caption=t("pdf_caption", lang, count=len(users)),
+                caption=caption,
                 parse_mode="Markdown",
                 reply_markup=get_main_keyboard(lang)
             )
@@ -379,7 +469,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             )
             return
 
-        # 2. PDF yuklab olish
+        # 2. PDF yuklab olish (Barcha xodimlar)
         if data == "export_pdf":
             lang = get_user_lang(chat_id) or "uz"
             bot.answer_callback_query(call.id, "PDF...")
@@ -387,7 +477,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             send_pdf_document(bot, chat_id, users, lang=lang)
             return
 
-        # 3. 10 qatordan iborat pagination: pg:<page>
+        # 3. 10 qatordan iborat barcha xodimlar pagination: pg:<page>
         if data.startswith("pg:"):
             page = int(data.split(":")[1])
             lang = get_user_lang(chat_id) or "uz"
@@ -404,6 +494,52 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             except Exception:
                 pass
             bot.answer_callback_query(call.id)
+            return
+
+        # 4. Qidiruv natijalari pagination: spg:<sid>:<page>
+        if data.startswith("spg:"):
+            parts = data.split(":")
+            if len(parts) == 3:
+                sid = parts[1]
+                page = int(parts[2])
+                session = get_search_session(sid, chat_id)
+                if not session or not session.get("users"):
+                    bot.answer_callback_query(call.id, "Qidiruv eskirgan / Поиск устарел", show_alert=True)
+                    return
+
+                lang = get_user_lang(chat_id) or "uz"
+                text, markup = build_search_pagination_text_and_markup(
+                    query=session["query"],
+                    users=session["users"],
+                    page=page,
+                    sid=sid,
+                    lang=lang
+                )
+                try:
+                    bot.edit_message_text(
+                        text,
+                        chat_id=chat_id,
+                        message_id=call.message.message_id,
+                        parse_mode="Markdown",
+                        reply_markup=markup
+                    )
+                except Exception as e:
+                    logger.warning(f"edit_message_text xatosi (spg): {e}")
+            bot.answer_callback_query(call.id)
+            return
+
+        # 5. Qidiruv natijalari bo'yicha PDF eksport: spdf:<sid>
+        if data.startswith("spdf:"):
+            parts = data.split(":")
+            sid = parts[1] if len(parts) > 1 else ""
+            session = get_search_session(sid, chat_id)
+            lang = get_user_lang(chat_id) or "uz"
+            if not session or not session.get("users"):
+                bot.answer_callback_query(call.id, "Qidiruv eskirgan / Поиск устарел", show_alert=True)
+                return
+
+            bot.answer_callback_query(call.id, "PDF...")
+            send_pdf_document(bot, chat_id, session["users"], lang=lang, query=session.get("query"))
             return
 
     # Foydalanuvchi istalgan matn yozganda avtomatik qidiruv
@@ -425,7 +561,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
         if not users:
             bot.send_message(
                 chat_id,
-                t("search_not_found", lang, query=query),
+                t("search_not_found", lang, query=query.replace("*", "").replace("_", "")),
                 parse_mode="Markdown",
                 reply_markup=get_main_keyboard(lang)
             )
@@ -433,27 +569,24 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
 
         if len(users) == 1:
             user = users[0]
+            sid = save_search_session(chat_id, query, users)
             text = (
                 t("search_found_single", lang) +
                 format_user_card(user, lang)
             )
-            bot.send_message(chat_id, text, parse_mode="Markdown", reply_markup=get_main_keyboard(lang))
-        else:
-            header = t("search_found_multiple", lang, query=query, count=len(users))
-            lines = [header]
-            for idx, u in enumerate(users[:10], start=1):
-                name = u.get("name") or u.get("email", "").split("@")[0]
-                email = u.get("email", "")
-                lines.append(f"*{idx}.* 👤 *{name}*\n     📧 `{email}`\n")
-
             markup = InlineKeyboardMarkup()
             markup.add(
-                InlineKeyboardButton(t("btn_results_pdf", lang), callback_data="export_pdf")
+                InlineKeyboardButton(f"{t('btn_results_pdf', lang)} (1)", callback_data=f"spdf:{sid}")
             )
-
+            bot.send_message(chat_id, text, parse_mode="Markdown", reply_markup=markup)
+        else:
+            sid = save_search_session(chat_id, query, users)
+            text, markup = build_search_pagination_text_and_markup(
+                query=query, users=users, page=0, sid=sid, lang=lang
+            )
             bot.send_message(
                 chat_id,
-                "\n".join(lines),
+                text,
                 parse_mode="Markdown",
                 reply_markup=markup
             )

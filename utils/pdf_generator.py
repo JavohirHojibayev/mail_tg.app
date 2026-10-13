@@ -29,16 +29,16 @@ for font_path, bold_path in [
         except Exception:
             pass
 
-def generate_employees_pdf(users: list, output_path: str = None) -> str:
+def generate_employees_pdf(users: list, output_path: str = None, title: str = "DKZ AJ mail xodimlar ro'yxati") -> str:
     """
-    PDF sarlavhasida faqatgina "DKZ AJ mail xodimlar ro'yxati" sarlavhasi
-    va xodim nomi hamda pochta manzilidan iborat jadval bo'ladi.
+    PDF sarlavhasida berilgan sarlavha va xodim nomi hamda pochta manzilidan iborat jadval bo'ladi.
     """
     if not output_path:
         output_dir = Path(__file__).resolve().parent.parent / "generated_docs"
         output_dir.mkdir(exist_ok=True)
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = str(output_dir / f"DKZ_AJ_mail_xodimlar_royxati_{timestamp}.pdf")
+        prefix = "DKZ_AJ_qidiruv" if "Qidiruv" in title or "Поиск" in title else "DKZ_AJ_mail_xodimlar_royxati"
+        output_path = str(output_dir / f"{prefix}_{timestamp}.pdf")
 
     doc = SimpleDocTemplate(
         output_path,
@@ -103,8 +103,8 @@ def generate_employees_pdf(users: list, output_path: str = None) -> str:
 
     elements = []
 
-    # Sarlavha — FAQATGINA "DKZ AJ mail xodimlar ro'yxati"
-    elements.append(Paragraph("DKZ AJ mail xodimlar ro'yxati", title_style))
+    # Sarlavha
+    elements.append(Paragraph(title, title_style))
     elements.append(Spacer(1, 10))
 
     # Jadval: №, Xodim F.I.SH (Nomi), Korporativ Pochta Manzili

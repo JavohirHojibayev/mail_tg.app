@@ -2,6 +2,8 @@ import json
 import logging
 from pathlib import Path
 
+from typing import Optional, Union
+
 logger = logging.getLogger(__name__)
 
 PREFS_FILE = Path(__file__).resolve().parent.parent / "user_preferences.json"
@@ -23,12 +25,12 @@ def _save_prefs(prefs: dict):
     except Exception as e:
         logger.warning(f"Error saving user preferences: {e}")
 
-def get_user_lang(chat_id: int or str) -> str:
+def get_user_lang(chat_id: Union[int, str]) -> Optional[str]:
     """Foydalanuvchi tanlagan tilni qaytaradi (tanlanmagan bo'lsa None)"""
     prefs = _load_prefs()
     return prefs.get(str(chat_id))
 
-def set_user_lang(chat_id: int or str, lang: str):
+def set_user_lang(chat_id: Union[int, str], lang: str):
     """Foydalanuvchi tilini saqlaydi ('ru' yoki 'en')"""
     prefs = _load_prefs()
     prefs[str(chat_id)] = lang
