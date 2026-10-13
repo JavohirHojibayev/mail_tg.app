@@ -12,7 +12,7 @@
     "email": "a.utanazarov@uz-potash.uz"
   },
   {
-    "name": "Analitik",
+    "name": "analitik",
     "email": "analitik@uz-potash.uz"
   },
   {
@@ -36,7 +36,7 @@
     "email": "cheslav.yuhnevich@pgp-project.ru"
   },
   {
-    "name": "Damir Narbayev",
+    "name": "d.narbayev",
     "email": "d.narbayev@uz-potash.uz"
   },
   {
@@ -68,7 +68,7 @@
     "email": "husanov.a@uz-potash.uz"
   },
   {
-    "name": "I Aliyev",
+    "name": "i.aliyev",
     "email": "i.aliyev@uz-potash.uz"
   },
   {
@@ -80,16 +80,16 @@
     "email": "x.ibragimov@uz-potash.uz"
   },
   {
-    "name": "Ibrat Nurboev",
-    "email": "investment@uz-potash.uz"
-  },
-  {
-    "name": "Import Dkz",
+    "name": "import_dkz",
     "email": "import_dkz@uz-potash.uz"
   },
   {
     "name": "Info",
     "email": "info@anticorruption.uz"
+  },
+  {
+    "name": "investment",
+    "email": "investment@uz-potash.uz"
   },
   {
     "name": "Ismail Tangirov",
@@ -192,7 +192,7 @@
     "email": "p.matveev@acgr.uz"
   },
   {
-    "name": "Postmaster",
+    "name": "postmaster",
     "email": "postmaster@uz-potash.uz"
   },
   {
