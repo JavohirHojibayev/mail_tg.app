@@ -1,66 +1,87 @@
-# 🤖 UZ-Potash Korporativ Pochta — Telegram Bot (@dkzmail_bot)
+# 🤖 UZ-Potash Korporativ Pochta — Telegram Bot
 
-Ushbu Telegram bot **UZ-Potash** korporativ pochtasidagi (`mail.uz-potash.uz` / iRedMail) barcha xodimlarning ism-familiyasi, lavozimi, bo'limi, telefon raqami va elektron pochtasini qidirish va ko'rish uchun mo'ljallangan.
+Ushbu Telegram bot **UZ-Potash (Dehqonobod Kaliy Zavodi)** korporativ pochtasidagi barcha xodimlarning ismi va elektron pochta manzillarini qidirish, ko'rish hamda rasmiy **PDF** formatda eksport qilish uchun mo'ljallangan.
 
 ---
 
-## 🌟 Imkoniyatlari
+## 🌟 Asosiy Imkoniyatlar
 
-- 👥 **Barcha xodimlar katalogi:** Sahifalab ko'rish (pagination)
-- 🔍 **Tezkor qidiruv:** Ism, familiya, lavozim yoki pochta orqali izlash
-- 🏢 **Bo'limlar filtri:** Bo'limlar kesimida xodimlarni saralash
-- 📋 **Xodim kartasi:** To'liq ma'lumotlar va pochtani 1 bosishda nusxalash
-- 🔑 **Ikki xil ulanish mexanizmi:**
-  1. **PostgreSQL (`vmail`)**: Server ichida bevosita ulanish
-  2. **REST API (`https://mail.uz-potash.uz/api`)**: Korporativ login orqali
-- ⚡️ **Lokal kesh (Offline Fallback):** Server bilan vaqtincha aloqa uzilganda ham ma'lumotlar saqlanadi
+- 👥 **120+ Xodimlar Katalogi:** Barcha korporativ pochta foydalanuvchilarining to'liq ro'yxati.
+- 🔍 **Universal Qidiruv:** Katta-kichik harflar, Lotin va Krill yozuvlariga to'liq moslashgan (`Javohir` = `Жавоҳир` = `Жавохир`).
+- 📄 **PDF Eksport:** Barcha xodimlarning nomi va pochtasi jamlangan rasmiy PDF ma'lumotnoma generatsiya qilish.
+- 📱 **Doimiy Menyu:** Telegramning doimiy `[Menu]` tugmasi va qulay boshqaruv klaviaturasi.
+- 🔒 **Xavfsiz Arxitektura:** Parollar va maxfiy kalitlar GitHub'ga chiqmaydi (`.gitignore` himoyasi).
+
+---
+
+## 📁 Loyiha Strukturasi
+
+```
+mail_tg.app/
+├── 📄 bot.py                  # Botni ishga tushiruvchi asosiy fayl
+├── ⚙️ config.py               # Konfiguratsiya (muhit o'zgaruvchilarini yuklash)
+├── 🔐 .env.example            # Muhit sozlamalari namunasi (GitHub uchun xavfsiz)
+├── 🚫 .gitignore              # Maxfiy va keraksiz fayllarni cheklash
+├── 📦 requirements.txt        # Python bog'liqliklari
+├── 🚀 run_bot.bat             # Windows uchun 1-bosishda ishga tushiruvchi
+├── 🐧 run_bot.sh              # Linux server uchun ishga tushiruvchi skript
+├── 📋 users_cache.json        # Xodimlar ma'lumotlari kesh bazasi
+├── 📁 handlers/
+│   ├── __init__.py
+│   └── bot_handlers.py        # Telegram komandalari va interaktiv menyu
+├── 📁 services/
+│   ├── __init__.py
+│   ├── data_manager.py        # Xodimlar ma'lumotlarini boshqarish va qidiruv
+│   └── db_service.py          # PostgreSQL (vmail) bilan aloqa
+├── 📁 utils/
+│   ├── translit.py            # Lotin <-> Krill universal qidiruv
+│   └── pdf_generator.py       # Rasmiy 3-ustunli PDF hujjat generatsiyasi
+└── 📁 generated_docs/         # Generatsiya qilingan PDF fayllar papkasi
+```
 
 ---
 
 ## 🚀 Ishga Tushirish (Windows)
 
-1. Ushbu papkaga kiring:
+1. **Repozitoriyani yuklab oling yoki oching:**
    ```cmd
    cd C:\Users\acer\Desktop\mail_tg.app
    ```
 
-2. `.env` faylida sozlamalarni tekshiring:
-   ```env
-   BOT_TOKEN=8875078214:AAFJZgddl_Rm5E21SjfUR36FvpZJRvt9lWI
+2. **Sozlamalarni kiritish:**
+   `.env.example` faylidan nusxa olib `.env` yarating va parollarni kiriting:
+   ```cmd
+   copy .env.example .env
    ```
 
-3. Botni ishga tushiring:
+3. **Kutubxonalarni o'rnatish:**
    ```cmd
-   run_bot.bat
+   pip install -r requirements.txt
    ```
-   yoki
+
+4. **Botni ishga tushirish:**
+   [run_bot.bat](file:///c:/Users/acer/Desktop/mail_tg.app/run_bot.bat) ni ishga tushiring yoki:
    ```cmd
    python bot.py
    ```
 
 ---
 
-## 🐧 Linux Serverda O'rnatish va Ishga Tushirish
+## 🐧 Linux Serverda O'rnatish (Ubuntu / Debian)
 
-1. Loyihani serverga nusxalang:
+1. **Loyiha papkasiga o'ting:**
    ```bash
    cd /opt/mail_tg.app
    python3 -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt
+   cp .env.example .env
+   nano .env
    ```
 
-2. `.env` faylini sozlang:
-   ```env
-   BOT_TOKEN=8875078214:AAFJZgddl_Rm5E21SjfUR36FvpZJRvt9lWI
-   DB_HOST=127.0.0.1
-   DB_USER=vmailadmin
-   DB_PASSWORD=YOUR_DB_PASSWORD
-   ```
-
-3. Systemd servisi orqali doimiy ishga tushirish:
+2. **Systemd orqali 24/7 rejimda xizmat sifatida ishga tushirish:**
    ```ini
-   # /etc/systemd/system/dkzmail_bot.service
+   # /etc/systemd/system/mail_tg_bot.service
    [Unit]
    Description=UZ-Potash Telegram Mail Bot
    After=network.target postgresql.service
@@ -72,6 +93,7 @@ Ushbu Telegram bot **UZ-Potash** korporativ pochtasidagi (`mail.uz-potash.uz` / 
    ExecStart=/opt/mail_tg.app/venv/bin/python bot.py
    Restart=always
    RestartSec=5
+   EnvironmentFile=/opt/mail_tg.app/.env
 
    [Install]
    WantedBy=multi-user.target
@@ -79,8 +101,8 @@ Ushbu Telegram bot **UZ-Potash** korporativ pochtasidagi (`mail.uz-potash.uz` / 
 
    ```bash
    sudo systemctl daemon-reload
-   sudo systemctl enable dkzmail_bot
-   sudo systemctl start dkzmail_bot
+   sudo systemctl enable mail_tg_bot
+   sudo systemctl start mail_tg_bot
    ```
 
 ---
@@ -88,10 +110,18 @@ Ushbu Telegram bot **UZ-Potash** korporativ pochtasidagi (`mail.uz-potash.uz` / 
 ## 📱 Bot Buyruqlari
 
 | Buyruq | Tavsif |
-|--------|--------|
-| `/start` | Botni ishga tushirish va asosiy menyu |
-| `/list` | Barcha xodimlar ro'yxati (sahifalar bilan) |
-| `/departments` | Kompaniya bo'limlari ro'yxati |
-| `/login <email> <parol>` | Korporativ pochta orqali tizimga kirish |
+|---|---|
+| `/start` | Botni ishga tushirish va asosiy menyuni chiqarish |
+| `/list` | Barcha xodimlar va ularning pochtalari ro'yxati |
+| `/pdf` | Xodimlar ro'yxatini toza PDF formatda yuklab olish |
+| `/search` | Qidiruv bo'limi |
 | `/help` | Qo'llanma |
-| *Ixtiyoriy matn* | Shunchaki xodim ismini yozsangiz avtomatik qidiradi |
+| *Ixtiyoriy matn* | Xodim ismini yozsangiz avtomatik topib beradi |
+
+---
+
+## 🔐 Xavfsizlik
+
+- Barcha maxfiy kalitlar, parollar va tokenlar faqat **`.env`** faylida saqlanadi.
+- `.env` fayli **`.gitignore`** orqali GitHub'ga chiqishdan 100% himoyalangan.
+- GitHub'ga faqat xavfsiz **`.env.example`** namunasi yuklanadi.

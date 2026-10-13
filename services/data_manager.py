@@ -2,7 +2,7 @@ import logging
 import json
 from pathlib import Path
 from services.db_service import DBService
-from services.api_service import ApiService
+from utils.translit import matches_query
 
 logger = logging.getLogger(__name__)
 
@@ -11,85 +11,58 @@ CACHE_FILE = Path(__file__).resolve().parent.parent / "users_cache.json"
 class DataManager:
     def __init__(self):
         self.db = DBService()
-        self.api = ApiService()
-        self._user_tokens = {}  # telegram_chat_id -> user specific token
 
-    def authenticate_user(self, chat_id: int, email: str, password: str) -> tuple[bool, str]:
-        """Foydalanuvchi o'z korporativ pochtasi orqali tizimga kiradi"""
-        ok, msg = self.api.login(email, password)
-        if ok and self.api.token:
-            self._user_tokens[chat_id] = self.api.token
-            # Xodimlarni yangilab keshga saqlash
-            self.refresh_cache()
-        return ok, msg
+    def get_all_users_raw(self) -> list:
+        """Barcha mavjud xodimlarni Kesh yoki DB dan yig'adi"""
+        # 1. Keshdan o'qish (eng tez va ishonchli)
+        cached = self._load_cache()
+        if cached:
+            return cached
 
-    def is_user_authenticated(self, chat_id: int) -> bool:
-        return chat_id in self._user_tokens or bool(self.api.token)
-
-    def get_users(self, search: str = None, department: str = None) -> list:
-        """
-        Xodimlarni bir nechta manbadan izlaydi:
-        1. PostgreSQL to'g'ridan-to'g'ri (eng tezkor)
-        2. Backend REST API
-        3. Mahalliy JSON kesh
-        """
-        # 1. DB orqali tekshirish
+        # 2. DB dan o'qish
         if self.db.is_available():
-            users = self.db.get_users(search=search, department=department)
+            users = self.db.get_users()
             if users:
                 self._save_cache(users)
                 return users
 
-        # 2. API orqali tekshirish
-        users = self.api.get_users(search=search, department=department)
-        if users:
-            self._save_cache(users)
-            return users
-
-        # 3. Keshdan o'qish (offline fallback)
-        cached = self._load_cache()
-        if cached:
-            filtered = cached
-            if department:
-                filtered = [u for u in filtered if u.get("department") == department]
-            if search:
-                s = search.lower()
-                filtered = [
-                    u for u in filtered
-                    if s in u.get("name", "").lower()
-                    or s in u.get("email", "").lower()
-                    or s in u.get("department", "").lower()
-                    or s in u.get("position", "").lower()
-                ]
-            return filtered
-
         return []
 
-    def get_departments(self) -> list:
-        """Bo'limlar ro'yxatini olish"""
-        if self.db.is_available():
-            deps = self.db.get_departments()
-            if deps:
-                return deps
+    def get_users(self, search: str = None) -> list:
+        """
+        Xodimlarni qidirish:
+        - Katta-kichik harf farqsiz (case-insensitive)
+        - Lotin va Krill yozuvlariga to'liq moslashgan (transliteratsiya)
+        - x va h almashtirishlariga bardoshli
+        """
+        all_users = self.get_all_users_raw()
+        if not all_users:
+            return []
 
-        deps = self.api.get_departments()
-        if deps:
-            return deps
+        if not search:
+            return all_users
 
-        # Keshdan bo'limlarni ajratish
-        cached = self._load_cache()
-        dept_set = {u.get("department") for u in cached if u.get("department")}
-        return sorted(list(dept_set))
+        search_clean = search.strip()
+        matched = []
+        for u in all_users:
+            name = u.get("name", "")
+            email = u.get("email", "")
 
-    def refresh_cache(self):
-        """Keshni yangilaydi"""
-        users = []
+            if (matches_query(name, search_clean) or
+                matches_query(email.split("@")[0], search_clean) or
+                matches_query(email, search_clean)):
+                matched.append(u)
+
+        return matched
+
+    def refresh_from_db(self) -> bool:
+        """Server bazasidan ma'lumotlarni qayta o'qib keshni yangilaydi"""
         if self.db.is_available():
             users = self.db.get_users()
-        elif self.api.token:
-            users = self.api.get_users()
-        if users:
-            self._save_cache(users)
+            if users:
+                self._save_cache(users)
+                return True
+        return False
 
     def _save_cache(self, users: list):
         try:

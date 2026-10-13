@@ -1,94 +1,101 @@
+import os
 import logging
-import math
 from telebot import TeleBot
 from telebot.types import (
     Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton,
-    InlineKeyboardMarkup, InlineKeyboardButton
+    InlineKeyboardMarkup, InlineKeyboardButton, BotCommand
 )
 from services.data_manager import DataManager
+from utils.pdf_generator import generate_employees_pdf
 import config
 
 logger = logging.getLogger(__name__)
 
-# Asosiy klaviatura
+# Doimiy ko'rinib turadigan asosiy klaviatura
 def get_main_keyboard():
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, is_persistent=True, row_width=2)
     keyboard.add(
         KeyboardButton("📋 Xodimlar ro'yxati"),
         KeyboardButton("🔍 Qidirish")
     )
     keyboard.add(
-        KeyboardButton("🏢 Bo'limlar"),
-        KeyboardButton("🔑 Kirish (/login)")
+        KeyboardButton("📥 PDF yuklab olish"),
+        KeyboardButton("ℹ️ Yordam")
     )
-    keyboard.add(KeyboardButton("ℹ️ Yordam"))
     return keyboard
-
-# Xodimlar sahifasi uchun Inline klaviatura
-def build_users_page_keyboard(users: list, page: int, total_pages: int, prefix: str = "usrpage"):
-    markup = InlineKeyboardMarkup(row_width=1)
-    
-    start_idx = page * config.PAGE_SIZE
-    end_idx = min(start_idx + config.PAGE_SIZE, len(users))
-    current_batch = users[start_idx:end_idx]
-
-    for user in current_batch:
-        name = user.get("name") or user.get("email", "").split("@")[0]
-        email = user.get("email", "")
-        dept = user.get("department", "")
-        btn_text = f"👤 {name} - 📧 {email}"
-        if dept:
-            btn_text = f"👤 {name} ({dept})"
-        markup.add(InlineKeyboardButton(text=btn_text, callback_data=f"user:{email}"))
-
-    # Sahifalash tugmalari
-    nav_buttons = []
-    if page > 0:
-        nav_buttons.append(InlineKeyboardButton("⬅️ Oldingi", callback_data=f"{prefix}:{page-1}"))
-    nav_buttons.append(InlineKeyboardButton(f"📄 {page+1}/{max(1, total_pages)}", callback_data="noop"))
-    if page < total_pages - 1:
-        nav_buttons.append(InlineKeyboardButton("Keyingi ➡️", callback_data=f"{prefix}:{page+1}"))
-
-    if nav_buttons:
-        markup.row(*nav_buttons)
-
-    return markup
 
 def format_user_card(user: dict) -> str:
     name = user.get("name") or user.get("email", "").split("@")[0]
     email = user.get("email", "Mavjud emas")
-    position = user.get("position") or "Ko'rsatilmagan"
-    dept = user.get("department") or "Ko'rsatilmagan"
-    phone = user.get("phone") or "Ko'rsatilmagan"
-    is_online = user.get("is_online", False)
-    status_str = "🟢 Online" if is_online else "⚪️ Offline"
 
     card = (
-        f"📋 *XODIM KARTASI*\n"
-        f"━━━━━━━━━━━━━━━━━━━\n"
         f"👤 *F.I.SH:* {name}\n"
-        f"📧 *Pochta:* `{email}`\n"
-        f"💼 *Lavozim:* {position}\n"
-        f"🏢 *Bo'lim:* {dept}\n"
-        f"📞 *Telefon:* `{phone}`\n"
-        f"📶 *Holati:* {status_str}\n"
-        f"━━━━━━━━━━━━━━━━━━━\n"
-        f"💡 _Pochta manzilini nusxalash uchun ustiga bosing_"
+        f"📧 *Pochta manzili:* `{email}`\n\n"
+        f"👉 _Pochta manzilini nusxalash uchun ustiga bosing: `{email}`_"
     )
     return card
+
+def send_pdf_document(bot: TeleBot, chat_id: int, users: list):
+    """Xodimlar ro'yxatini PDF formatda yaratib foydalanuvchiga yuboradi"""
+    wait_msg = bot.send_message(
+        chat_id,
+        "⏳ *PDF hujjat tayyorlanmoqda, kuting...*",
+        parse_mode="Markdown",
+        reply_markup=get_main_keyboard()
+    )
+    try:
+        pdf_path = generate_employees_pdf(users)
+        with open(pdf_path, "rb") as f:
+            bot.send_document(
+                chat_id,
+                f,
+                caption=(
+                    f"📄 *UZ-Potash Korporativ Pochta Ma'lumotnomasi*\n\n"
+                    f"👥 Jami: *{len(users)}* nafar xodim\n"
+                    f"🌐 Rasmiy domen: `@uz-potash.uz`"
+                ),
+                parse_mode="Markdown",
+                reply_markup=get_main_keyboard()
+            )
+        try:
+            bot.delete_message(chat_id, wait_msg.message_id)
+        except Exception:
+            pass
+    except Exception as e:
+        logger.error(f"PDF yuborishda xatolik: {e}")
+        bot.edit_message_text(
+            f"❌ PDF hujjat yaratishda xatolik yuz berdi: {str(e)}",
+            chat_id=chat_id,
+            message_id=wait_msg.message_id
+        )
 
 
 def register_handlers(bot: TeleBot, data_manager: DataManager):
 
+    # Telegram menyusi uchun doimiy komandalarni o'rnatish
+    try:
+        bot.set_my_commands([
+            BotCommand("list", "📋 Barcha xodimlar va pochtalari"),
+            BotCommand("pdf", "📥 Ro'yxatni PDF yuklab olish"),
+            BotCommand("search", "🔍 Xodim qidirish"),
+            BotCommand("start", "🔄 Asosiy menyuni ko'rsatish"),
+            BotCommand("help", "ℹ️ Yordam")
+        ])
+    except Exception as e:
+        logger.warning(f"set_my_commands xatosi: {e}")
+
     # /start
     @bot.message_handler(commands=['start'])
     def cmd_start(message: Message):
+        users_count = len(data_manager.get_users())
         text = (
             "👋 *Assalomu alaykum!*\n\n"
             "Bu *UZ-Potash* korporativ pochta xodimlari ma'lumotnoma boti.\n\n"
-            "Ushbu bot orqali korporativ pochtadagi xodimlarning ism-familiyasi, "
-            "pochta manzili, bo'limi va lavozimini oson topishingiz mumkin.\n\n"
-            "Quyidagi tugmalardan birini tanlang yoki to'g'ridan-to'g'ri xodim ismini yozing 👇"
+            f"📊 Tizimda jami: *{users_count}* nafar xodim pochtasi mavjud.\n\n"
+            "📋 *Xodimlar ro'yxati:* Barcha xodimlarning nomi va pochtalarini to'liq ko'rish hamda PDF formatda yuklab olish.\n"
+            "🔍 *Tezkor qidiruv:* Xodim ismini lotin yoki krill, katta yoki kichik harflarda yozib yuboring.\n"
+            "_Misol: `Javohir`, `жавоҳир ҳожибаев`, `Zaripov`..._\n\n"
+            "Quyidagi menyu tugmalaridan birini tanlang 👇"
         )
         bot.send_message(
             message.chat.id,
@@ -97,23 +104,20 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             reply_markup=get_main_keyboard()
         )
 
-    # /help
+    # /help va Yordam tugmasi
     @bot.message_handler(commands=['help'])
     @bot.message_handler(func=lambda m: m.text == "ℹ️ Yordam")
     def cmd_help(message: Message):
         text = (
-            "📖 *BOTDAN FOYDALANISH BO'YICHA QO'LLANMA*\n\n"
-            "🔹 *Xodimlar ro'yxati:* /list yoki '📋 Xodimlar ro'yxati' tugmasi\n"
-            "🔹 *Tezkor qidiruv:* Shunchaki xodim ismi, familiyasi yoki pochtasini xabar qilib yuboring\n"
-            "🔹 *Bo'limlar:* /departments yoki '🏢 Bo'limlar'\n"
-            "🔹 *Tizimga kirish:* /login <email> <parol>\n"
-            "   _Misol: `/login ali@uz-potash.uz 12345`_\n\n"
-            "🌐 *Korporativ server:* `https://mail.uz-potash.uz`\n"
-            "📧 *Domen:* `@uz-potash.uz`"
+            "📖 *QO'LLANMA VA IMKONIYATLAR*\n\n"
+            "🔹 *Xodimlar ro'yxati:* '📋 Xodimlar ro'yxati' yoki /list — barcha 120+ xodimlarning ism-familiyasi va pochtasini chiqaradi.\n"
+            "🔹 *PDF Export:* '📥 PDF yuklab olish' yoki /pdf — faqat xodim nomi va pochtasi jamlangan rasmiy PDF faylni beradi.\n"
+            "🔹 *Qidirish:* Xodim ismini to'g'ridan-to'g'ri yozing. Katta-kichik, lotin yoki krill yozuvlariga to'liq moslashgan.\n\n"
+            "🌐 *Korporativ pochta domeni:* `@uz-potash.uz`"
         )
-        bot.send_message(message.chat.id, text, parse_mode="Markdown")
+        bot.send_message(message.chat.id, text, parse_mode="Markdown", reply_markup=get_main_keyboard())
 
-    # /list va tugma
+    # 📋 XODIMLAR RO'YXATI — BARCHA 120+ xodimlarni to'liq chiqarish + PDF yuklab olish tugmasi
     @bot.message_handler(commands=['list'])
     @bot.message_handler(func=lambda m: m.text == "📋 Xodimlar ro'yxati")
     def cmd_list(message: Message):
@@ -121,248 +125,157 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
         if not users:
             bot.send_message(
                 message.chat.id,
-                "⚠️ Hozircha xodimlar ma'lumotlari yuklanmadi.\n\n"
-                "Iltimos, avval `/login email parol` buyrug'i orqali korporativ akkaunt bilan kiring "
-                "yoki server ulanishini tekshiring.",
-                parse_mode="Markdown"
+                "⚠️ Hozircha xodimlar ma'lumotlari topilmadi.",
+                parse_mode="Markdown",
+                reply_markup=get_main_keyboard()
             )
             return
 
-        total_pages = math.ceil(len(users) / config.PAGE_SIZE)
-        markup = build_users_page_keyboard(users, 0, total_pages, prefix="usrpage")
-        bot.send_message(
-            message.chat.id,
-            f"👥 *Barcha xodimlar ro'yxati* (Jami: {len(users)} nafar):\n"
-            f"Batafsil ma'lumot ko'rish uchun xodim ustiga bosing 👇",
-            parse_mode="Markdown",
-            reply_markup=markup
+        total_users = len(users)
+
+        # Telegram 4096 belgilik cheklovi uchun xabarlarni bo'lib yuborish (har bir xabarda 45 ta xodim)
+        chunk_size = 45
+        chunks = [users[i:i + chunk_size] for i in range(0, total_users, chunk_size)]
+
+        markup = InlineKeyboardMarkup()
+        markup.add(
+            InlineKeyboardButton(f"📥 Barchasini .PDF formatda yuklab olish ({total_users} nafar)", callback_data="export_pdf")
         )
 
-    # /departments va tugma
-    @bot.message_handler(commands=['departments'])
-    @bot.message_handler(func=lambda m: m.text == "🏢 Bo'limlar")
-    def cmd_departments(message: Message):
-        departments = data_manager.get_departments()
-        if not departments:
-            bot.send_message(
-                message.chat.id,
-                "⚠️ Bo'limlar ro'yxati topilmadi. Avval `/login` qiling.",
-                parse_mode="Markdown"
-            )
+        for part_idx, chunk in enumerate(chunks, start=1):
+            start_num = (part_idx - 1) * chunk_size + 1
+            lines = [
+                f"📋 *UZ-POTASH XODIMLAR RO'YXATI* (Qism {part_idx}/{len(chunks)})",
+                f"📊 _Jami: {total_users} nafar xodim_\n",
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            ]
+
+            for idx, u in enumerate(chunk, start=start_num):
+                name = u.get("name") or u.get("email", "").split("@")[0]
+                email = u.get("email", "")
+                lines.append(f"*{idx}.* 👤 *{name}*\n     📧 `{email}`\n")
+
+            lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+
+            # Oxirgi qismga PDF tugmasini ulash
+            if part_idx == len(chunks):
+                lines.append("💡 _Pochta manzilini nusxalash uchun ustiga bosing._")
+                bot.send_message(
+                    message.chat.id,
+                    "\n".join(lines),
+                    parse_mode="Markdown",
+                    reply_markup=markup
+                )
+            else:
+                bot.send_message(
+                    message.chat.id,
+                    "\n".join(lines),
+                    parse_mode="Markdown"
+                )
+
+        # Doimiy klaviatura ochiq turishini ta'minlash
+        bot.send_message(
+            message.chat.id,
+            f"✅ Barcha *{total_users}* nafar xodim ro'yxati chiqarildi.\n\n"
+            f"📄 PDF fayl olish uchun yuqoridagi tugmani yoki pastdagi **📥 PDF yuklab olish** menyusini bosing 👇",
+            parse_mode="Markdown",
+            reply_markup=get_main_keyboard()
+        )
+
+    # 📥 PDF YUKLAB OLISH
+    @bot.message_handler(commands=['pdf'])
+    @bot.message_handler(func=lambda m: m.text == "📥 PDF yuklab olish")
+    def cmd_pdf(message: Message):
+        users = data_manager.get_users()
+        if not users:
+            bot.send_message(message.chat.id, "⚠️ Xodimlar ma'lumotlari topilmadi.", reply_markup=get_main_keyboard())
             return
+        send_pdf_document(bot, message.chat.id, users)
 
-        markup = InlineKeyboardMarkup(row_width=1)
-        for dept in departments:
-            markup.add(InlineKeyboardButton(text=f"🏢 {dept}", callback_data=f"dept:{dept}"))
-
-        bot.send_message(
-            message.chat.id,
-            "🏢 *Kompaniya bo'limlari:*\nKerakli bo'limdagi xodimlarni ko'rish uchun tanlang 👇",
-            parse_mode="Markdown",
-            reply_markup=markup
-        )
-
-    # Qidirish tugmasi
+    # 🔍 Qidirish prompti
+    @bot.message_handler(commands=['search'])
     @bot.message_handler(func=lambda m: m.text == "🔍 Qidirish")
     def btn_search_prompt(message: Message):
         bot.send_message(
             message.chat.id,
-            "🔍 Qidirmoqchi bo'lgan xodimning *ism*, *familiya*, *lavozim* yoki *pochta* manzilini yozib yuboring:\n\n"
-            "_Misol: Javohir, Buxgalter, admin..._",
-            parse_mode="Markdown"
+            "🔍 Qidirmoqchi bo'lgan xodimning ismini yozing:\n"
+            "_(Lotin yoki Krill, katta yoki kichik harflarda yozishingiz mumkin)_\n\n"
+            "Misol: `Javohir`, `жавоҳир ҳожибаев`, `Zaripov`, `Бадалов`...",
+            parse_mode="Markdown",
+            reply_markup=get_main_keyboard()
         )
 
-    # /login buyrug'i
-    @bot.message_handler(commands=['login'])
-    @bot.message_handler(func=lambda m: m.text == "🔑 Kirish (/login)")
-    def cmd_login(message: Message):
-        parts = message.text.strip().split()
-        if len(parts) < 3:
-            bot.send_message(
-                message.chat.id,
-                "🔑 *Korporativ tizimga kirish:*\n\n"
-                "Quyidagi formatda yuboring:\n"
-                "`/login <email> <parol>`\n\n"
-                "Misol:\n"
-                "`/login ism@uz-potash.uz MaxfiyParol123`\n\n"
-                "⚠️ _Xavfsizlik uchun parolingiz yozilgan xabar avtomatik o'chiriladi._",
-                parse_mode="Markdown"
-            )
-            return
-
-        email = parts[1]
-        password = parts[2]
-
-        # Xavfsizlik: foydalanuvchi yozgan parolni chatdan o'chirish
-        try:
-            bot.delete_message(message.chat.id, message.message_id)
-        except Exception:
-            pass
-
-        wait_msg = bot.send_message(message.chat.id, "🔄 Tizimga ulanmoqda, kuting...")
-
-        ok, text = data_manager.authenticate_user(message.chat.id, email, password)
-        if ok:
-            bot.edit_message_text(
-                f"✅ *Muvaffaqiyatli kirdingiz!*\n\n{text}\n"
-                f"Endi barcha xodimlar va bo'limlar ma'lumotlarini ko'rishingiz mumkin.",
-                chat_id=message.chat.id,
-                message_id=wait_msg.message_id,
-                parse_mode="Markdown"
-            )
-        else:
-            bot.edit_message_text(
-                f"❌ *Kirishda xatolik:*\n{text}\n\nIltimos, qayta urinib ko'ring.",
-                chat_id=message.chat.id,
-                message_id=wait_msg.message_id,
-                parse_mode="Markdown"
-            )
-
-    # Callback query handler
+    # Callback handler
     @bot.callback_query_handler(func=lambda call: True)
     def handle_callbacks(call: CallbackQuery):
         data = call.data
 
-        if data == "noop":
-            bot.answer_callback_query(call.id)
-            return
-
-        # Sahifalash: usrpage:<page>
-        if data.startswith("usrpage:"):
-            page = int(data.split(":")[1])
+        if data == "export_pdf":
+            bot.answer_callback_query(call.id, "PDF tayyorlanmoqda...")
             users = data_manager.get_users()
-            total_pages = math.ceil(len(users) / config.PAGE_SIZE)
-            markup = build_users_page_keyboard(users, page, total_pages, prefix="usrpage")
-            try:
-                bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=markup)
-            except Exception:
-                pass
-            bot.answer_callback_query(call.id)
+            send_pdf_document(bot, call.message.chat.id, users)
             return
 
-        # Bo'lim bo'yicha sahifalash: deptpage:<dept>:<page>
-        if data.startswith("deptpage:"):
-            parts = data.split(":")
-            dept = parts[1]
-            page = int(parts[2])
-            users = data_manager.get_users(department=dept)
-            total_pages = math.ceil(len(users) / config.PAGE_SIZE)
-            markup = build_users_page_keyboard(users, page, total_pages, prefix=f"deptpage:{dept}")
-            try:
-                bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=markup)
-            except Exception:
-                pass
-            bot.answer_callback_query(call.id)
-            return
-
-        # Bo'lim tanlanganda: dept:<name>
-        if data.startswith("dept:"):
-            dept = data.split(":", 1)[1]
-            users = data_manager.get_users(department=dept)
-            if not users:
-                bot.answer_callback_query(call.id, f"{dept} bo'limida xodimlar topilmadi.")
-                return
-
-            total_pages = math.ceil(len(users) / config.PAGE_SIZE)
-            markup = build_users_page_keyboard(users, 0, total_pages, prefix=f"deptpage:{dept}")
-            markup.add(InlineKeyboardButton("🔙 Bo'limlar ro'yxatiga", callback_data="back_depts"))
-
-            bot.edit_message_text(
-                f"🏢 *{dept}* bo'limi xodimlari ({len(users)} nafar):",
-                chat_id=call.message.chat.id,
-                message_id=call.message.message_id,
-                parse_mode="Markdown",
-                reply_markup=markup
-            )
-            bot.answer_callback_query(call.id)
-            return
-
-        # Bo'limlarga qaytish
-        if data == "back_depts":
-            departments = data_manager.get_departments()
-            markup = InlineKeyboardMarkup(row_width=1)
-            for d in departments:
-                markup.add(InlineKeyboardButton(text=f"🏢 {d}", callback_data=f"dept:{d}"))
-            bot.edit_message_text(
-                "🏢 *Kompaniya bo'limlari:*\nKerakli bo'limdagi xodimlarni ko'rish uchun tanlang 👇",
-                chat_id=call.message.chat.id,
-                message_id=call.message.message_id,
-                parse_mode="Markdown",
-                reply_markup=markup
-            )
-            bot.answer_callback_query(call.id)
-            return
-
-        # Bitta xodim kartasini ko'rish: user:<email>
         if data.startswith("user:"):
             email = data.split(":", 1)[1]
-            users = data_manager.get_users(search=email.split("@")[0])
-            found = next((u for u in users if u.get("email") == email), None)
-            if not found:
-                # To'liq ro'yxatdan izlash
-                all_u = data_manager.get_users()
-                found = next((u for u in all_u if u.get("email") == email), None)
+            users = data_manager.get_users()
+            found = next((u for u in users if u.get("email", "").lower() == email.lower()), None)
 
             if found:
                 text = format_user_card(found)
-                back_markup = InlineKeyboardMarkup()
-                back_markup.add(InlineKeyboardButton("🔙 Xodimlar ro'yxatiga", callback_data="back_list"))
-                bot.send_message(
-                    call.message.chat.id,
-                    text,
-                    parse_mode="Markdown",
-                    reply_markup=back_markup
-                )
+                bot.send_message(call.message.chat.id, text, parse_mode="Markdown", reply_markup=get_main_keyboard())
             else:
                 bot.answer_callback_query(call.id, "Xodim ma'lumotlari topilmadi.")
             bot.answer_callback_query(call.id)
             return
 
-        # Ro'yxatga qaytish
-        if data == "back_list":
-            users = data_manager.get_users()
-            total_pages = math.ceil(len(users) / config.PAGE_SIZE)
-            markup = build_users_page_keyboard(users, 0, total_pages, prefix="usrpage")
-            bot.send_message(
-                call.message.chat.id,
-                f"👥 *Barcha xodimlar ro'yxati* (Jami: {len(users)} nafar):",
-                parse_mode="Markdown",
-                reply_markup=markup
-            )
-            bot.answer_callback_query(call.id)
-            return
-
-    # Matn orqali avtomatik xodim qidirish
+    # Foydalanuvchi istalgan matn yozganda avtomatik qidiruv (Lotin, Krill, Katta, Kichik)
     @bot.message_handler(func=lambda m: True)
-    def auto_search(message: Message):
+    def handle_text_search(message: Message):
         query = message.text.strip()
         if not query or query.startswith("/"):
             return
 
         users = data_manager.get_users(search=query)
+
         if not users:
             bot.send_message(
                 message.chat.id,
                 f"🔍 *\"{query}\"* bo'yicha hech qanday xodim topilmadi.\n\n"
-                f"💡 Qidiruv so'zini to'g'ri yozganingizni tekshiring yoki ro'yxatdan qidiring: /list",
-                parse_mode="Markdown"
+                f"💡 Ismni boshqacha yozib ko'ring yoki barcha xodimlarni ko'ring: /list",
+                parse_mode="Markdown",
+                reply_markup=get_main_keyboard()
             )
             return
 
         if len(users) == 1:
-            # Aniq 1 ta xodim topilsa kartasini ko'rsatish
-            bot.send_message(
-                message.chat.id,
-                format_user_card(users[0]),
-                parse_mode="Markdown"
+            user = users[0]
+            text = (
+                f"✅ *Xodim topildi:*\n\n" +
+                format_user_card(user)
             )
+            bot.send_message(message.chat.id, text, parse_mode="Markdown", reply_markup=get_main_keyboard())
         else:
-            total_pages = math.ceil(len(users) / config.PAGE_SIZE)
-            markup = build_users_page_keyboard(users, 0, total_pages, prefix=f"srchpage:{query}")
+            lines = [f"🔍 *\"{query}\"* bo'yicha {len(users)} ta xodim topildi:\n"]
+            for idx, u in enumerate(users[:20], start=1):
+                name = u.get("name") or u.get("email", "").split("@")[0]
+                email = u.get("email", "")
+                lines.append(f"*{idx}.* 👤 *{name}*\n     📧 `{email}`\n")
+
+            markup = InlineKeyboardMarkup()
+            markup.add(
+                InlineKeyboardButton(f"📥 Ushbu natijalarni PDF yuklab olish", callback_data="export_pdf")
+            )
+
             bot.send_message(
                 message.chat.id,
-                f"🔍 *\"{query}\"* bo'yicha {len(users)} ta natija topildi:\n"
-                f"Batafsil ma'lumot uchun xodimni tanlang 👇",
+                "\n".join(lines),
                 parse_mode="Markdown",
                 reply_markup=markup
+            )
+            # Doimiy menyu klaviaturasini ham yuborish
+            bot.send_message(
+                message.chat.id,
+                "👇 Menyudan foydalanishingiz mumkin:",
+                reply_markup=get_main_keyboard()
             )
