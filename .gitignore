@@ -36,3 +36,6 @@ Desktop.ini
 
 # Log fayllar
 *.log
+
+# Foydalanuvchi sozlamalari
+user_preferences.json
