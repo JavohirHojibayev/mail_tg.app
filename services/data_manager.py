@@ -14,12 +14,10 @@ class DataManager:
 
     def get_all_users_raw(self) -> list:
         """Barcha mavjud xodimlarni Kesh yoki DB dan yig'adi"""
-        # 1. Keshdan o'qish (eng tez va ishonchli)
         cached = self._load_cache()
         if cached:
             return cached
 
-        # 2. DB dan o'qish
         if self.db.is_available():
             users = self.db.get_users()
             if users:
@@ -63,6 +61,10 @@ class DataManager:
                 self._save_cache(users)
                 return True
         return False
+
+    def refresh_cache(self) -> bool:
+        """Alias for refresh_from_db"""
+        return self.refresh_from_db()
 
     def _save_cache(self, users: list):
         try:

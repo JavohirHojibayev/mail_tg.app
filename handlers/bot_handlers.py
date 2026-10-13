@@ -1,5 +1,6 @@
 import os
 import logging
+import math
 from telebot import TeleBot
 from telebot.types import (
     Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton,
@@ -7,11 +8,11 @@ from telebot.types import (
 )
 from services.data_manager import DataManager
 from utils.pdf_generator import generate_employees_pdf
-import config
 
 logger = logging.getLogger(__name__)
 
-# Doimiy ko'rinib turadigan asosiy klaviatura
+PAGE_SIZE = 10
+
 def get_main_keyboard():
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True, is_persistent=True, row_width=2)
     keyboard.add(
@@ -23,6 +24,54 @@ def get_main_keyboard():
         KeyboardButton("ℹ️ Yordam")
     )
     return keyboard
+
+def build_pagination_text_and_markup(users: list, page: int, prefix: str = "pg"):
+    total_users = len(users)
+    total_pages = max(1, math.ceil(total_users / PAGE_SIZE))
+    page = max(0, min(page, total_pages - 1))
+
+    start_idx = page * PAGE_SIZE
+    end_idx = min(start_idx + PAGE_SIZE, total_users)
+    page_users = users[start_idx:end_idx]
+
+    lines = [
+        "📋 *DKZ AJ XODIMLAR RO'YXATI*",
+        f"📊 _Sahifa: {page + 1} / {total_pages} (Jami: {total_users} nafar)_\n",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    ]
+
+    for idx, u in enumerate(page_users, start=start_idx + 1):
+        name = u.get("name") or u.get("email", "").split("@")[0]
+        email = u.get("email", "")
+        lines.append(f"*{idx}.* 👤 *{name}*\n     📧 `{email}`\n")
+
+    lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    lines.append("💡 _Pochta manzilini nusxalash uchun ustiga bosing._")
+
+    text = "\n".join(lines)
+
+    # Inline navigatsiya tugmalari
+    markup = InlineKeyboardMarkup()
+    nav_row = []
+
+    if page > 0:
+        nav_row.append(InlineKeyboardButton("⬅️ Oldingi", callback_data=f"{prefix}:{page-1}"))
+    else:
+        nav_row.append(InlineKeyboardButton("⏹", callback_data="noop"))
+
+    nav_row.append(InlineKeyboardButton(f"📄 {page+1} / {total_pages}", callback_data="noop"))
+
+    if page < total_pages - 1:
+        nav_row.append(InlineKeyboardButton("Keyingi ➡️", callback_data=f"{prefix}:{page+1}"))
+    else:
+        nav_row.append(InlineKeyboardButton("⏹", callback_data="noop"))
+
+    markup.row(*nav_row)
+    markup.add(
+        InlineKeyboardButton(f"📥 Barchasini .PDF formatda yuklab olish ({total_users} nafar)", callback_data="export_pdf")
+    )
+
+    return text, markup
 
 def format_user_card(user: dict) -> str:
     name = user.get("name") or user.get("email", "").split("@")[0]
@@ -36,7 +85,6 @@ def format_user_card(user: dict) -> str:
     return card
 
 def send_pdf_document(bot: TeleBot, chat_id: int, users: list):
-    """Xodimlar ro'yxatini PDF formatda yaratib foydalanuvchiga yuboradi"""
     wait_msg = bot.send_message(
         chat_id,
         "⏳ *PDF hujjat tayyorlanmoqda, kuting...*",
@@ -50,7 +98,7 @@ def send_pdf_document(bot: TeleBot, chat_id: int, users: list):
                 chat_id,
                 f,
                 caption=(
-                    f"📄 *UZ-Potash Korporativ Pochta Ma'lumotnomasi*\n\n"
+                    f"📄 *DKZ AJ mail xodimlar ro'yxati*\n\n"
                     f"👥 Jami: *{len(users)}* nafar xodim\n"
                     f"🌐 Rasmiy domen: `@uz-potash.uz`"
                 ),
@@ -72,10 +120,10 @@ def send_pdf_document(bot: TeleBot, chat_id: int, users: list):
 
 def register_handlers(bot: TeleBot, data_manager: DataManager):
 
-    # Telegram menyusi uchun doimiy komandalarni o'rnatish
+    # Telegram komandalar menyusi
     try:
         bot.set_my_commands([
-            BotCommand("list", "📋 Barcha xodimlar va pochtalari"),
+            BotCommand("list", "📋 Xodimlar ro'yxati (10 tadan)"),
             BotCommand("pdf", "📥 Ro'yxatni PDF yuklab olish"),
             BotCommand("search", "🔍 Xodim qidirish"),
             BotCommand("start", "🔄 Asosiy menyuni ko'rsatish"),
@@ -90,9 +138,9 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
         users_count = len(data_manager.get_users())
         text = (
             "👋 *Assalomu alaykum!*\n\n"
-            "Bu *UZ-Potash* korporativ pochta xodimlari ma'lumotnoma boti.\n\n"
+            "Bu *DKZ AJ* korporativ pochta xodimlari ma'lumotnoma boti.\n\n"
             f"📊 Tizimda jami: *{users_count}* nafar xodim pochtasi mavjud.\n\n"
-            "📋 *Xodimlar ro'yxati:* Barcha xodimlarning nomi va pochtalarini to'liq ko'rish hamda PDF formatda yuklab olish.\n"
+            "📋 *Xodimlar ro'yxati:* 10 tadan sahifalangan holda xodimlar nomi va pochtasini ko'rish.\n"
             "🔍 *Tezkor qidiruv:* Xodim ismini lotin yoki krill, katta yoki kichik harflarda yozib yuboring.\n"
             "_Misol: `Javohir`, `жавоҳир ҳожибаев`, `Zaripov`..._\n\n"
             "Quyidagi menyu tugmalaridan birini tanlang 👇"
@@ -110,14 +158,14 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     def cmd_help(message: Message):
         text = (
             "📖 *QO'LLANMA VA IMKONIYATLAR*\n\n"
-            "🔹 *Xodimlar ro'yxati:* '📋 Xodimlar ro'yxati' yoki /list — barcha 120+ xodimlarning ism-familiyasi va pochtasini chiqaradi.\n"
-            "🔹 *PDF Export:* '📥 PDF yuklab olish' yoki /pdf — faqat xodim nomi va pochtasi jamlangan rasmiy PDF faylni beradi.\n"
-            "🔹 *Qidirish:* Xodim ismini to'g'ridan-to'g'ri yozing. Katta-kichik, lotin yoki krill yozuvlariga to'liq moslashgan.\n\n"
-            "🌐 *Korporativ pochta domeni:* `@uz-potash.uz`"
+            "🔹 *Xodimlar ro'yxati:* '📋 Xodimlar ro'yxati' yoki /list — xodimlarni 10 tadan sahifalab ko'rish.\n"
+            "🔹 *PDF Export:* '📥 PDF yuklab olish' yoki /pdf — 'DKZ AJ mail xodimlar ro'yxati' sarlavhali rasmiy PDF hujjat.\n"
+            "🔹 *Qidirish:* Xodim ismini to'g'ridan-to'g'ri yozing. Lotin va Krill yozuvlariga to'liq moslashgan (`Javohir` = `Жавоҳир` = `Жавохир`).\n\n"
+            "🌐 *Rasmiy domen:* `@uz-potash.uz`"
         )
         bot.send_message(message.chat.id, text, parse_mode="Markdown", reply_markup=get_main_keyboard())
 
-    # 📋 XODIMLAR RO'YXATI — BARCHA 120+ xodimlarni to'liq chiqarish + PDF yuklab olish tugmasi
+    # 📋 XODIMLAR RO'YXATI — 10 ta qatordan iborat pagination
     @bot.message_handler(commands=['list'])
     @bot.message_handler(func=lambda m: m.text == "📋 Xodimlar ro'yxati")
     def cmd_list(message: Message):
@@ -131,55 +179,12 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             )
             return
 
-        total_users = len(users)
-
-        # Telegram 4096 belgilik cheklovi uchun xabarlarni bo'lib yuborish (har bir xabarda 45 ta xodim)
-        chunk_size = 45
-        chunks = [users[i:i + chunk_size] for i in range(0, total_users, chunk_size)]
-
-        markup = InlineKeyboardMarkup()
-        markup.add(
-            InlineKeyboardButton(f"📥 Barchasini .PDF formatda yuklab olish ({total_users} nafar)", callback_data="export_pdf")
-        )
-
-        for part_idx, chunk in enumerate(chunks, start=1):
-            start_num = (part_idx - 1) * chunk_size + 1
-            lines = [
-                f"📋 *UZ-POTASH XODIMLAR RO'YXATI* (Qism {part_idx}/{len(chunks)})",
-                f"📊 _Jami: {total_users} nafar xodim_\n",
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            ]
-
-            for idx, u in enumerate(chunk, start=start_num):
-                name = u.get("name") or u.get("email", "").split("@")[0]
-                email = u.get("email", "")
-                lines.append(f"*{idx}.* 👤 *{name}*\n     📧 `{email}`\n")
-
-            lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-
-            # Oxirgi qismga PDF tugmasini ulash
-            if part_idx == len(chunks):
-                lines.append("💡 _Pochta manzilini nusxalash uchun ustiga bosing._")
-                bot.send_message(
-                    message.chat.id,
-                    "\n".join(lines),
-                    parse_mode="Markdown",
-                    reply_markup=markup
-                )
-            else:
-                bot.send_message(
-                    message.chat.id,
-                    "\n".join(lines),
-                    parse_mode="Markdown"
-                )
-
-        # Doimiy klaviatura ochiq turishini ta'minlash
+        text, markup = build_pagination_text_and_markup(users, page=0, prefix="pg")
         bot.send_message(
             message.chat.id,
-            f"✅ Barcha *{total_users}* nafar xodim ro'yxati chiqarildi.\n\n"
-            f"📄 PDF fayl olish uchun yuqoridagi tugmani yoki pastdagi **📥 PDF yuklab olish** menyusini bosing 👇",
+            text,
             parse_mode="Markdown",
-            reply_markup=get_main_keyboard()
+            reply_markup=markup
         )
 
     # 📥 PDF YUKLAB OLISH
@@ -205,31 +210,41 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             reply_markup=get_main_keyboard()
         )
 
-    # Callback handler
+    # Callback handler (Pagination & PDF)
     @bot.callback_query_handler(func=lambda call: True)
     def handle_callbacks(call: CallbackQuery):
         data = call.data
 
+        if data == "noop":
+            bot.answer_callback_query(call.id)
+            return
+
+        # PDF yuklab olish
         if data == "export_pdf":
             bot.answer_callback_query(call.id, "PDF tayyorlanmoqda...")
             users = data_manager.get_users()
             send_pdf_document(bot, call.message.chat.id, users)
             return
 
-        if data.startswith("user:"):
-            email = data.split(":", 1)[1]
+        # 10 qatordan iborat pagination: pg:<page>
+        if data.startswith("pg:"):
+            page = int(data.split(":")[1])
             users = data_manager.get_users()
-            found = next((u for u in users if u.get("email", "").lower() == email.lower()), None)
-
-            if found:
-                text = format_user_card(found)
-                bot.send_message(call.message.chat.id, text, parse_mode="Markdown", reply_markup=get_main_keyboard())
-            else:
-                bot.answer_callback_query(call.id, "Xodim ma'lumotlari topilmadi.")
+            text, markup = build_pagination_text_and_markup(users, page=page, prefix="pg")
+            try:
+                bot.edit_message_text(
+                    text,
+                    chat_id=call.message.chat.id,
+                    message_id=call.message.message_id,
+                    parse_mode="Markdown",
+                    reply_markup=markup
+                )
+            except Exception:
+                pass
             bot.answer_callback_query(call.id)
             return
 
-    # Foydalanuvchi istalgan matn yozganda avtomatik qidiruv (Lotin, Krill, Katta, Kichik)
+    # Foydalanuvchi istalgan matn yozganda avtomatik qidiruv
     @bot.message_handler(func=lambda m: True)
     def handle_text_search(message: Message):
         query = message.text.strip()
@@ -257,14 +272,14 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             bot.send_message(message.chat.id, text, parse_mode="Markdown", reply_markup=get_main_keyboard())
         else:
             lines = [f"🔍 *\"{query}\"* bo'yicha {len(users)} ta xodim topildi:\n"]
-            for idx, u in enumerate(users[:20], start=1):
+            for idx, u in enumerate(users[:10], start=1):
                 name = u.get("name") or u.get("email", "").split("@")[0]
                 email = u.get("email", "")
                 lines.append(f"*{idx}.* 👤 *{name}*\n     📧 `{email}`\n")
 
             markup = InlineKeyboardMarkup()
             markup.add(
-                InlineKeyboardButton(f"📥 Ushbu natijalarni PDF yuklab olish", callback_data="export_pdf")
+                InlineKeyboardButton(f"📥 Natijalarni .PDF yuklab olish", callback_data="export_pdf")
             )
 
             bot.send_message(
@@ -272,10 +287,4 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 "\n".join(lines),
                 parse_mode="Markdown",
                 reply_markup=markup
-            )
-            # Doimiy menyu klaviaturasini ham yuborish
-            bot.send_message(
-                message.chat.id,
-                "👇 Menyudan foydalanishingiz mumkin:",
-                reply_markup=get_main_keyboard()
             )

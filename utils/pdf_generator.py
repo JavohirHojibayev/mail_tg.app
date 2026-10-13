@@ -31,26 +31,27 @@ for font_path, bold_path in [
 
 def generate_employees_pdf(users: list, output_path: str = None) -> str:
     """
-    Faqat xodim nomi va pochta manzilidan iborat toza, rasmiy PDF hujjat yaratadi.
-    Bo'lim, lavozim va telefon ustunlari talabga binoan olib tashlangan.
+    PDF sarlavhasida faqatgina "DKZ AJ mail xodimlar ro'yxati" sarlavhasi
+    va xodim nomi hamda pochta manzilidan iborat jadval bo'ladi.
     """
     if not output_path:
         output_dir = Path(__file__).resolve().parent.parent / "generated_docs"
         output_dir.mkdir(exist_ok=True)
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = str(output_dir / f"UZ_Potash_Xodimlar_Royxati_{timestamp}.pdf")
+        output_path = str(output_dir / f"DKZ_AJ_mail_xodimlar_royxati_{timestamp}.pdf")
 
     doc = SimpleDocTemplate(
         output_path,
         pagesize=A4,
         leftMargin=35,
         rightMargin=35,
-        topMargin=30,
-        bottomMargin=30
+        topMargin=35,
+        bottomMargin=35
     )
 
     styles = getSampleStyleSheet()
 
+    # Sarlavha stili — Faqat "DKZ AJ mail xodimlar ro'yxati"
     title_style = ParagraphStyle(
         'DocTitle',
         parent=styles['Normal'],
@@ -59,18 +60,7 @@ def generate_employees_pdf(users: list, output_path: str = None) -> str:
         leading=20,
         textColor=colors.HexColor("#0B3954"),
         alignment=1, # Center
-        spaceAfter=5
-    )
-
-    subtitle_style = ParagraphStyle(
-        'DocSubtitle',
-        parent=styles['Normal'],
-        fontName=FONT_NAME,
-        fontSize=10.5,
-        leading=14,
-        textColor=colors.HexColor("#4A5568"),
-        alignment=1,
-        spaceAfter=18
+        spaceAfter=15
     )
 
     cell_style = ParagraphStyle(
@@ -113,12 +103,11 @@ def generate_employees_pdf(users: list, output_path: str = None) -> str:
 
     elements = []
 
-    # Sarlavha
-    elements.append(Paragraph("UZ-POTASH (DEHQONOBOD KALIY ZAVODI)", title_style))
-    current_date = datetime.datetime.now().strftime("%d.%m.%Y")
-    elements.append(Paragraph(f"Korporativ Pochta Xodimlari Katalogi &bull; Sana: {current_date}", subtitle_style))
+    # Sarlavha — FAQATGINA "DKZ AJ mail xodimlar ro'yxati"
+    elements.append(Paragraph("DKZ AJ mail xodimlar ro'yxati", title_style))
+    elements.append(Spacer(1, 10))
 
-    # Jadval — FAQAT 3 TA USTUN: №, Xodim F.I.SH, Pochta Manzili
+    # Jadval: №, Xodim F.I.SH (Nomi), Korporativ Pochta Manzili
     table_data = [
         [
             Paragraph("<b>№</b>", header_cell_style),
@@ -137,12 +126,11 @@ def generate_employees_pdf(users: list, output_path: str = None) -> str:
             Paragraph(f"<b>{email}</b>", email_cell_style),
         ])
 
-    # Ustunlar kengligi: A4 kengligi 595 - marginlar (70) = 525 pt
     col_widths = [40, 265, 220]
 
     emp_table = Table(table_data, colWidths=col_widths, repeatRows=1)
     emp_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#0B3954")), # Korporativ to'q ko'k rang
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#0B3954")),
         ('ALIGN', (0, 0), (0, -1), 'CENTER'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('BOTTOMPADDING', (0, 0), (-1, 0), 7),
@@ -154,18 +142,5 @@ def generate_employees_pdf(users: list, output_path: str = None) -> str:
     ]))
 
     elements.append(emp_table)
-    elements.append(Spacer(1, 15))
-
-    footer_style = ParagraphStyle(
-        'FooterText',
-        parent=styles['Normal'],
-        fontName=FONT_NAME,
-        fontSize=8.5,
-        leading=11,
-        textColor=colors.HexColor("#718096"),
-        alignment=2 # Right
-    )
-    elements.append(Paragraph(f"Jami xodimlar: {len(users)} nafar &bull; Rasmiy domen: @uz-potash.uz", footer_style))
-
     doc.build(elements)
     return output_path
