@@ -3,7 +3,7 @@ import math
 from telebot import TeleBot
 from telebot.types import (
     Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton,
-    InlineKeyboardMarkup, InlineKeyboardButton, BotCommand
+    InlineKeyboardMarkup, InlineKeyboardButton, BotCommand, BotCommandScopeChat
 )
 from services.data_manager import DataManager
 from services.user_prefs import get_user_lang, set_user_lang
@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 
 PAGE_SIZE = 10
 
-def get_main_keyboard(lang: str = "ru") -> ReplyKeyboardMarkup:
-    """Foydalanuvchi tili bo'yicha asosiy reply menyu tugmalari"""
+def get_main_keyboard(lang: str = "uz") -> ReplyKeyboardMarkup:
+    """Foydalanuvchi tili bo'yicha asosiy menyu tugmalari"""
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True, is_persistent=True, row_width=2)
     keyboard.add(
         KeyboardButton(t("btn_list", lang)),
@@ -31,25 +31,25 @@ def get_main_keyboard(lang: str = "ru") -> ReplyKeyboardMarkup:
     return keyboard
 
 def get_lang_inline_markup() -> InlineKeyboardMarkup:
-    """Tilni tanlash uchun inline tugmalar"""
+    """Tilni tanlash uchun inline tugmalar (faqat O'zbek va Rus tili)"""
     markup = InlineKeyboardMarkup()
     markup.row(
-        InlineKeyboardButton("🇷🇺 Русский", callback_data="set_lang:ru"),
-        InlineKeyboardButton("🇬🇧 English", callback_data="set_lang:en")
+        InlineKeyboardButton("🇺🇿 O'zbekcha", callback_data="set_lang:uz"),
+        InlineKeyboardButton("🇷🇺 Русский", callback_data="set_lang:ru")
     )
     return markup
 
 def send_language_prompt(bot: TeleBot, chat_id: int):
     """Til tanlash kerakligini takidlovchi xabar"""
     text = (
-        "🌐 *Пожалуйста, выберите язык интерфейса / Please select language:*\n\n"
-        "⚠️ _Для работы со справочником необходимо выбрать один из 2 языков:_\n"
-        "_To use the corporate directory, please select one of the 2 languages:_"
+        "🌐 *Iltimos, interfeys tilini tanlang / Пожалуйста, выберите язык интерфейса:*\n\n"
+        "⚠️ _Botdan foydalanish uchun 2 tildan birini tanlashingiz lozim:_\n"
+        "_Для работы с ботом необходимо выбрать один из 2 языков:_"
     )
     bot.send_message(chat_id, text, parse_mode="Markdown", reply_markup=get_lang_inline_markup())
 
 def update_bot_commands_for_lang(bot: TeleBot, chat_id: int, lang: str):
-    """Telegram komandalar menyusini tanlangan tilda sozlash"""
+    """Telegram [Menu] buyruqlarini ushbu chat uchun tanlangan tilda sozlash"""
     try:
         commands = [
             BotCommand("list", t("cmd_list", lang)),
@@ -59,11 +59,11 @@ def update_bot_commands_for_lang(bot: TeleBot, chat_id: int, lang: str):
             BotCommand("lang", t("cmd_lang", lang)),
             BotCommand("start", t("cmd_start", lang)),
         ]
-        bot.set_my_commands(commands)
+        bot.set_my_commands(commands, scope=BotCommandScopeChat(chat_id=chat_id))
     except Exception as e:
-        logger.warning(f"set_my_commands xatosi: {e}")
+        logger.warning(f"set_my_commands (chat scope) xatosi: {e}")
 
-def build_pagination_text_and_markup(users: list, page: int, lang: str = "ru", prefix: str = "pg"):
+def build_pagination_text_and_markup(users: list, page: int, lang: str = "uz", prefix: str = "pg"):
     total_users = len(users)
     total_pages = max(1, math.ceil(total_users / PAGE_SIZE))
     page = max(0, min(page, total_pages - 1))
@@ -111,12 +111,12 @@ def build_pagination_text_and_markup(users: list, page: int, lang: str = "ru", p
 
     return text, markup
 
-def format_user_card(user: dict, lang: str = "ru") -> str:
+def format_user_card(user: dict, lang: str = "uz") -> str:
     name = user.get("name") or user.get("email", "").split("@")[0]
     email = user.get("email", "Mavjud emas")
     return t("user_card", lang, name=name, email=email)
 
-def send_pdf_document(bot: TeleBot, chat_id: int, users: list, lang: str = "ru"):
+def send_pdf_document(bot: TeleBot, chat_id: int, users: list, lang: str = "uz"):
     wait_msg = bot.send_message(
         chat_id,
         t("pdf_wait", lang),
@@ -147,16 +147,26 @@ def send_pdf_document(bot: TeleBot, chat_id: int, users: list, lang: str = "ru")
 
 def register_handlers(bot: TeleBot, data_manager: DataManager):
 
-    # Standart buyruqlar menyusini o'rnatish
+    # Standart global buyruqlar menyusini o'rnatish
     try:
+        # Standart (O'zbekcha)
         bot.set_my_commands([
-            BotCommand("list", "📋 Список сотрудников / Employee list"),
-            BotCommand("pdf", "📥 Скачать PDF / Download PDF"),
-            BotCommand("search", "🔍 Поиск / Search"),
-            BotCommand("help", "ℹ️ Помощь / Help"),
-            BotCommand("lang", "🌐 Выбор языка / Select language"),
-            BotCommand("start", "🔄 Главное меню / Start"),
+            BotCommand("list", t("cmd_list", "uz")),
+            BotCommand("pdf", t("cmd_pdf", "uz")),
+            BotCommand("search", t("cmd_search", "uz")),
+            BotCommand("help", t("cmd_help", "uz")),
+            BotCommand("lang", t("cmd_lang", "uz")),
+            BotCommand("start", t("cmd_start", "uz")),
         ])
+        # Rus tili uchun
+        bot.set_my_commands([
+            BotCommand("list", t("cmd_list", "ru")),
+            BotCommand("pdf", t("cmd_pdf", "ru")),
+            BotCommand("search", t("cmd_search", "ru")),
+            BotCommand("help", t("cmd_help", "ru")),
+            BotCommand("lang", t("cmd_lang", "ru")),
+            BotCommand("start", t("cmd_start", "ru")),
+        ], language_code="ru")
     except Exception as e:
         logger.warning(f"set_my_commands xatosi: {e}")
 
@@ -166,10 +176,11 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
         chat_id = message.chat.id
         lang = get_user_lang(chat_id)
 
-        # Start bosilganda tilni tanlash kerakligi doim takidlanadi
+        # Start bosilganda til tanlash kerakligi takidlanadi
         send_language_prompt(bot, chat_id)
 
         if lang:
+            update_bot_commands_for_lang(bot, chat_id, lang)
             users_count = len(data_manager.get_users())
             bot.send_message(
                 chat_id,
@@ -186,10 +197,10 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     # /help va Yordam tugmasi
     @bot.message_handler(commands=['help'])
     @bot.message_handler(func=lambda m: m.text in [
-        t("btn_help", "ru"), t("btn_help", "en"), "ℹ️ Yordam", "ℹ️ Помощь", "ℹ️ Help"
+        t("btn_help", "uz"), t("btn_help", "ru"), "ℹ️ Yordam", "ℹ️ Помощь"
     ])
     def cmd_help(message: Message):
-        lang = get_user_lang(message.chat.id) or "ru"
+        lang = get_user_lang(message.chat.id) or "uz"
         markup = InlineKeyboardMarkup()
         markup.add(
             InlineKeyboardButton("💬 Javohir Hojibayev (Telegram)", url="https://t.me/Javohir_Hojibayev")
@@ -208,15 +219,15 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     # 📋 Ro'yxat komandasi (/list)
     @bot.message_handler(commands=['list'])
     @bot.message_handler(func=lambda m: m.text in [
-        t("btn_list", "ru"), t("btn_list", "en"), "📋 Список сотрудников", "📋 Employee List", "📋 Xodimlar ro'yxati"
+        t("btn_list", "uz"), t("btn_list", "ru"), "📋 Xodimlar ro'yxati", "📋 Список сотрудников"
     ])
     def cmd_list(message: Message):
-        lang = get_user_lang(message.chat.id) or "ru"
+        lang = get_user_lang(message.chat.id) or "uz"
         users = data_manager.get_users()
         if not users:
             bot.send_message(
                 message.chat.id,
-                "⚠️ Список пуст / Directory empty.",
+                "⚠️ Ro'yxat bo'sh / Список пуст.",
                 parse_mode="Markdown",
                 reply_markup=get_main_keyboard(lang)
             )
@@ -233,15 +244,15 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     # 📥 PDF yuklab olish (/pdf)
     @bot.message_handler(commands=['pdf'])
     @bot.message_handler(func=lambda m: m.text in [
-        t("btn_pdf", "ru"), t("btn_pdf", "en"), "📥 Скачать PDF", "📥 Download PDF", "📥 PDF yuklab olish"
+        t("btn_pdf", "uz"), t("btn_pdf", "ru"), "📥 PDF yuklab olish", "📥 Скачать PDF"
     ])
     def cmd_pdf(message: Message):
-        lang = get_user_lang(message.chat.id) or "ru"
+        lang = get_user_lang(message.chat.id) or "uz"
         users = data_manager.get_users()
         if not users:
             bot.send_message(
                 message.chat.id,
-                "⚠️ Список пуст / Directory empty.",
+                "⚠️ Ro'yxat bo'sh / Список пуст.",
                 reply_markup=get_main_keyboard(lang)
             )
             return
@@ -250,10 +261,10 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     # 🔍 Qidirish prompti (/search)
     @bot.message_handler(commands=['search'])
     @bot.message_handler(func=lambda m: m.text in [
-        t("btn_search", "ru"), t("btn_search", "en"), "🔍 Поиск", "🔍 Search", "🔍 Qidirish"
+        t("btn_search", "uz"), t("btn_search", "ru"), "🔍 Qidirish", "🔍 Поиск"
     ])
     def btn_search_prompt(message: Message):
-        lang = get_user_lang(message.chat.id) or "ru"
+        lang = get_user_lang(message.chat.id) or "uz"
         bot.send_message(
             message.chat.id,
             t("search_prompt", lang),
@@ -263,7 +274,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
 
     # 🌐 Til almashtirish tugmasi
     @bot.message_handler(func=lambda m: m.text in [
-        t("btn_lang", "ru"), t("btn_lang", "en"), "🌐 Язык / Language", "🌐 Language / Язык"
+        t("btn_lang", "uz"), t("btn_lang", "ru"), "🌐 Til / Язык", "🌐 Язык / Til"
     ])
     def btn_lang_prompt(message: Message):
         send_language_prompt(bot, message.chat.id)
@@ -304,7 +315,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
 
         # 2. PDF yuklab olish
         if data == "export_pdf":
-            lang = get_user_lang(chat_id) or "ru"
+            lang = get_user_lang(chat_id) or "uz"
             bot.answer_callback_query(call.id, "PDF...")
             users = data_manager.get_users()
             send_pdf_document(bot, chat_id, users, lang=lang)
@@ -313,7 +324,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
         # 3. 10 qatordan iborat pagination: pg:<page>
         if data.startswith("pg:"):
             page = int(data.split(":")[1])
-            lang = get_user_lang(chat_id) or "ru"
+            lang = get_user_lang(chat_id) or "uz"
             users = data_manager.get_users()
             text, markup = build_pagination_text_and_markup(users, page=page, lang=lang, prefix="pg")
             try:

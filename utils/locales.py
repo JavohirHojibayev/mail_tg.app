@@ -1,26 +1,102 @@
 """
 Ko'p tilli (Multi-language) lokalizatsiya moduli.
-Rus (ru) va Ingliz (en) tillari, shuningdek O'zbek (uz) tili qo'llab-quvvatlanadi.
+Faqat O'zbek (uz) va Rus (ru) tillari qo'llab-quvvatlanadi.
 """
 
 LANGUAGES = {
+    "uz": "🇺🇿 O'zbekcha",
     "ru": "🇷🇺 Русский",
-    "en": "🇬🇧 English",
 }
 
 TEXTS = {
+    "uz": {
+        "select_lang_prompt": (
+            "🌐 *Iltimos, interfeys tilini tanlang / Пожалуйста, выберите язык интерфейса:*\n\n"
+            "⚠️ _Botdan foydalanish uchun 2 tildan birini tanlashingiz lozim:_\n"
+            "_Для работы с ботом необходимо выбрать один из 2 языков:_"
+        ),
+        "lang_selected_confirm": "✅ Interfeys tili muvaffaqiyatli o'rnatildi: *O'zbek tili*",
+        "btn_list": "📋 Xodimlar ro'yxati",
+        "btn_search": "🔍 Qidirish",
+        "btn_pdf": "📥 PDF yuklab olish",
+        "btn_help": "ℹ️ Yordam",
+        "btn_lang": "🌐 Til / Язык",
+        "start_text": (
+            "👋 *Assalomu alaykum!*\n\n"
+            "Bu *DKZ AJ* korporativ pochta xodimlari ma'lumotnoma boti (`uz-potash.uz`).\n\n"
+            "📊 Tizimda jami: *{count}* nafar xodim pochtasi mavjud.\n\n"
+            "📋 *Xodimlar ro'yxati:* 10 tadan sahifalangan holda xodimlar nomi va pochtasini ko'rish.\n"
+            "🔍 *Tezkor qidiruv:* Xodim ismini lotin yoki krill, katta yoki kichik harflarda yozib yuboring.\n"
+            "_Misol: `Javohir`, `Hojibayev`, `javohir hojibayev`, `жавоҳир ҳожибаев`..._\n\n"
+            "Quyidagi menyu tugmalaridan birini tanlang 👇"
+        ),
+        "help_text": (
+            "📖 *QO'LLANMA VA YORDAM*\n\n"
+            "🔹 *Xodimlar ro'yxati:* «📋 Xodimlar ro'yxati» yoki /list — xodimlarni 10 tadan sahifalab ko'rish.\n"
+            "🔹 *PDF Export:* «📥 PDF yuklab olish» yoki /pdf — rasmiy PDF hujjatni yuklab olish.\n"
+            "🔹 *Qidirish:* Xodim ismini to'g'ridan-to'g'ri yozing (Lotin va Krill yozuvlariga to'liq moslashgan).\n"
+            "🔹 *Tilni almashtirish:* «🌐 Til / Язык» tugmasi yoki /lang komandasi.\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "📩 *YANGI POCHTA OCHISH:*\n"
+            "Yangi korporativ pochta ochish yoki texnik murojaatlar uchun mas'ul mutaxassislarga bog'laning:\n\n"
+            "1. 👤 *Javohir Hojibayev*\n"
+            "   ✈️ Telegram: [@Javohir_Hojibayev](https://t.me/Javohir_Hojibayev)\n"
+            "   📞 Telefon: `+998 94 542 41 21`\n\n"
+            "2. 👤 *Nurbek Jumayev*\n"
+            "   ✈️ Telegram: [@nurbekjumayev](https://t.me/nurbekjumayev)\n"
+            "   📞 Telefon: `+998 94 175 86 52`\n\n"
+            "🌐 *Rasmiy pochta domeni:* `@uz-potash.uz`"
+        ),
+        "search_prompt": (
+            "🔍 Qidirmoqchi bo'lgan xodimning ismini yozing:\n"
+            "_(Lotin yoki Krill, katta yoki kichik harflarda yozishingiz mumkin)_\n\n"
+            "Misol: `Javohir`, `Hojibayev`, `javohir hojibayev`, `жавоҳир ҳожибаев`..."
+        ),
+        "pagination_header": "📋 *DKZ AJ XODIMLAR RO'YXATI*",
+        "pagination_page_info": "📊 _Sahifa: {page} / {total_pages} (Jami: {total_users} nafar)_\n",
+        "pagination_footer": "💡 _Pochta manzilini nusxalash uchun ustiga bosing._",
+        "btn_prev": "⬅️ Oldingi",
+        "btn_next": "Keyingi ➡️",
+        "btn_export_all_pdf": "📥 Barchasini .PDF yuklab olish ({total_users} nafar)",
+        "btn_results_pdf": "📥 Natijalarni .PDF yuklab olish",
+        "user_card": (
+            "👤 *F.I.SH:* {name}\n"
+            "📧 *Pochta manzili:* `{email}`\n\n"
+            "👉 _Pochta manzilini nusxalash uchun ustiga bosing: `{email}`_"
+        ),
+        "search_found_single": "✅ *Xodim topildi:*\n\n",
+        "search_found_multiple": "🔍 *\"{query}\"* bo'yicha {count} ta xodim topildi:\n\n",
+        "search_not_found": (
+            "🔍 *\"{query}\"* bo'yicha hech qanday xodim topilmadi.\n\n"
+            "💡 Ismni boshqacha yozib ko'ring yoki barcha xodimlarni ko'ring: /list"
+        ),
+        "pdf_wait": "⏳ *PDF hujjat tayyorlanmoqda, kuting...*",
+        "pdf_caption": (
+            "📄 *DKZ AJ mail xodimlar ro'yxati*\n\n"
+            "👥 Jami: *{count}* nafar xodim\n"
+            "🌐 Rasmiy domen: `@uz-potash.uz`"
+        ),
+        "contact_javohir": "💬 Javohir Hojibayev (Telegram)",
+        "contact_nurbek": "💬 Nurbek Jumayev (Telegram)",
+        "cmd_list": "📋 Xodimlar ro'yxati (10 tadan)",
+        "cmd_pdf": "📥 Ro'yxatni PDF yuklab olish",
+        "cmd_search": "🔍 Xodim qidirish",
+        "cmd_start": "🔄 Asosiy menyu",
+        "cmd_help": "ℹ️ Yordam va kontaktlar",
+        "cmd_lang": "🌐 Tilni tanlash / Выбрать язык",
+    },
     "ru": {
         "select_lang_prompt": (
-            "🌐 *Пожалуйста, выберите язык интерфейса:*\n\n"
-            "⚠️ _Для продолжения работы со справочником необходимо выбрать язык:_\n"
-            "_To continue, please select your language:_"
+            "🌐 *Пожалуйста, выберите язык интерфейса / Iltimos, interfeys tilini tanlang:*\n\n"
+            "⚠️ _Для работы с ботом необходимо выбрать один из 2 языков:_\n"
+            "_Botdan foydalanish uchun 2 tildan birini tanlashingiz lozim:_"
         ),
         "lang_selected_confirm": "✅ Язык интерфейса успешно установлен: *Русский*",
         "btn_list": "📋 Список сотрудников",
         "btn_search": "🔍 Поиск",
         "btn_pdf": "📥 Скачать PDF",
         "btn_help": "ℹ️ Помощь",
-        "btn_lang": "🌐 Язык / Language",
+        "btn_lang": "🌐 Язык / Til",
         "start_text": (
             "👋 *Здравствуйте!*\n\n"
             "Это официальный справочный Telegram-бот корпоративной почты *АО «ДКЗ»* (`uz-potash.uz`).\n\n"
@@ -35,7 +111,7 @@ TEXTS = {
             "🔹 *Список сотрудников:* Нажмите «📋 Список сотрудников» или команду /list — постраничный просмотр по 10 записей.\n"
             "🔹 *Экспорт в PDF:* Нажмите «📥 Скачать PDF» или команду /pdf — скачать официальный PDF-документ.\n"
             "🔹 *Поиск:* Напишите имя или фамилию (поддерживаются латиница, кириллица, о/а).\n"
-            "🔹 *Смена языка:* Нажмите «🌐 Язык / Language» или команду /lang.\n\n"
+            "🔹 *Смена языка:* Нажмите «🌐 Язык / Til» или команду /lang.\n\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "📩 *ОТКРЫТИЕ НОВОЙ КОРПОРАТИВНОЙ ПОЧТЫ:*\n"
             "Для открытия нового почтового ящика или по техническим вопросам обращайтесь к ответственным специалистам:\n\n"
@@ -83,91 +159,15 @@ TEXTS = {
         "cmd_search": "🔍 Поиск сотрудника",
         "cmd_start": "🔄 Главное меню",
         "cmd_help": "ℹ️ Помощь и контакты",
-        "cmd_lang": "🌐 Выбрать язык / Change language",
-    },
-    "en": {
-        "select_lang_prompt": (
-            "🌐 *Please select interface language:*\n\n"
-            "⚠️ _To continue using the corporate directory, please select your language:_\n"
-            "_Для продолжения выберите язык:_"
-        ),
-        "lang_selected_confirm": "✅ Interface language set to: *English*",
-        "btn_list": "📋 Employee List",
-        "btn_search": "🔍 Search",
-        "btn_pdf": "📥 Download PDF",
-        "btn_help": "ℹ️ Help",
-        "btn_lang": "🌐 Language / Язык",
-        "start_text": (
-            "👋 *Welcome!*\n\n"
-            "This is the official corporate email directory bot for *JSC \"DKZ\"* (`uz-potash.uz`).\n\n"
-            "📊 Total directory entries: *{count}* employee emails.\n\n"
-            "📋 *Employee List:* Browse employees paginated by 10 per page.\n"
-            "🔍 *Quick Search:* Send employee name in Latin or Cyrillic.\n"
-            "_Example: `Javohir`, `Hojibayev`, `javohir hojibayev`, `жавоҳир ҳожибаев`..._\n\n"
-            "Please choose an option from the menu below 👇"
-        ),
-        "help_text": (
-            "📖 *HELP & SUPPORT*\n\n"
-            "🔹 *Employee Directory:* Click \"📋 Employee List\" or send /list — browse employees 10 per page.\n"
-            "🔹 *PDF Export:* Click \"📥 Download PDF\" or send /pdf — download full official PDF document.\n"
-            "🔹 *Search:* Type any name or surname (Latin, Cyrillic, and phonetic matches supported).\n"
-            "🔹 *Language:* Click \"🌐 Language / Язык\" or send /lang to switch language.\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            "📩 *CREATING A NEW CORPORATE EMAIL:*\n"
-            "To request a new corporate email address or for email assistance, please contact the administrators:\n\n"
-            "1. 👤 *Javohir Hojibayev*\n"
-            "   ✈️ Telegram: [@Javohir_Hojibayev](https://t.me/Javohir_Hojibayev)\n"
-            "   📞 Phone: `+998 94 542 41 21`\n\n"
-            "2. 👤 *Nurbek Jumayev*\n"
-            "   ✈️ Telegram: [@nurbekjumayev](https://t.me/nurbekjumayev)\n"
-            "   📞 Phone: `+998 94 175 86 52`\n\n"
-            "🌐 *Official domain:* `@uz-potash.uz`"
-        ),
-        "search_prompt": (
-            "🔍 Enter employee name or surname to search:\n"
-            "_(You can write in Latin or Cyrillic, lower or uppercase letters)_\n\n"
-            "Example: `Javohir`, `Hojibayev`, `javohir hojibayev`, `жавоҳир ҳожибаев`..."
-        ),
-        "pagination_header": "📋 *JSC \"DKZ\" EMPLOYEE DIRECTORY*",
-        "pagination_page_info": "📊 _Page: {page} / {total_pages} (Total: {total_users} employees)_\n",
-        "pagination_footer": "💡 _Tap on an email address to copy it._",
-        "btn_prev": "⬅️ Prev",
-        "btn_next": "Next ➡️",
-        "btn_export_all_pdf": "📥 Download all in .PDF ({total_users} emp.)",
-        "btn_results_pdf": "📥 Download results in .PDF",
-        "user_card": (
-            "👤 *Name:* {name}\n"
-            "📧 *Corporate Email:* `{email}`\n\n"
-            "👉 _Tap to copy email address: `{email}`_"
-        ),
-        "search_found_single": "✅ *Employee found:*\n\n",
-        "search_found_multiple": "🔍 Found {count} employees for *\"{query}\"*:\n\n",
-        "search_not_found": (
-            "🔍 No employees found for *\"{query}\"*.\n\n"
-            "💡 Try typing differently or view full directory: /list"
-        ),
-        "pdf_wait": "⏳ *Generating PDF document, please wait...*",
-        "pdf_caption": (
-            "📄 *DKZ AJ mail xodimlar ro'yxati*\n\n"
-            "👥 Total employees: *{count}*\n"
-            "🌐 Official domain: `@uz-potash.uz`"
-        ),
-        "contact_javohir": "💬 Javohir Hojibayev (Telegram)",
-        "contact_nurbek": "💬 Nurbek Jumayev (Telegram)",
-        "cmd_list": "📋 Employee list (10 per page)",
-        "cmd_pdf": "📥 Download PDF list",
-        "cmd_search": "🔍 Search employee",
-        "cmd_start": "🔄 Main menu",
-        "cmd_help": "ℹ️ Help and contacts",
-        "cmd_lang": "🌐 Select language",
+        "cmd_lang": "🌐 Выбрать язык / Tilni tanlash",
     }
 }
 
-def t(key: str, lang: str = "ru", **kwargs) -> str:
-    """Belgilangan til bo'yicha matnni qaytaradi (standart 'ru')"""
+def t(key: str, lang: str = "uz", **kwargs) -> str:
+    """Belgilangan til bo'yicha matnni qaytaradi (standart 'uz')"""
     if lang not in TEXTS:
-        lang = "ru"
-    template = TEXTS[lang].get(key, TEXTS["ru"].get(key, ""))
+        lang = "uz"
+    template = TEXTS[lang].get(key, TEXTS["uz"].get(key, ""))
     if kwargs:
         try:
             return template.format(**kwargs)
