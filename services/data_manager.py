@@ -51,6 +51,12 @@ class DataManager:
 
         # Moslik darajasi bo'yicha saralash (eng moslari eng birinchi)
         scored_users.sort(key=lambda x: x[0], reverse=True)
+
+        # Agar yuqori moslikdagi natijalar bo'lsa (masalan ism+familiya to'liq mos kelganlar),
+        # faqat to'liq moslarini qoldiramiz (keraksiz qisman mosliklarni chiqarmaymiz)
+        if scored_users and scored_users[0][0] >= 70:
+            scored_users = [item for item in scored_users if item[0] >= 70]
+
         return [u for score, u in scored_users]
 
     def refresh_from_db(self) -> bool:

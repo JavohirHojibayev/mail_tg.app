@@ -1,6 +1,6 @@
 """
 O'zbek tili Lotin-Krill transliteratsiyasi va qidiruvni normalizatsiya qilish moduli.
-Katta-kichik harflar, apostroflar, x/h, yev/ev va krill/lotin farqlariga to'liq moslashgan.
+Katta-kichik harflar, apostroflar, x/h, yev/ev, o/a va norboyev=narbayev kabi variantlarga to'liq moslashgan.
 """
 
 import re
@@ -14,7 +14,6 @@ CYR_TO_LAT = {
     'ъ': "'", 'ь': "", 'э': 'e', 'ю': 'yu', 'я': 'ya', 'ў': "o'", 'ғ': "g'", 'қ': 'q'
 }
 
-# Unlilardan keyin yoki so'z boshida 'е' -> 'ye'
 VOWELS = set("аеёиоуыэюяaouiey")
 
 def cyrillic_to_latin(text: str) -> str:
@@ -25,7 +24,6 @@ def cyrillic_to_latin(text: str) -> str:
     text_lower = text.lower()
     for idx, char in enumerate(text_lower):
         if char == 'е':
-            # Agar so'z boshida yoki unlidan keyin bo'lsa 'ye'
             prev_char = text_lower[idx - 1] if idx > 0 else ' '
             if idx == 0 or prev_char in VOWELS or prev_char in ' \t\n-_.':
                 result.append('ye')
@@ -39,26 +37,42 @@ def normalize_text(text: str) -> str:
     """
     Qidiruv uchun matnni tozalaydi va barcha variantlarni bir xillashtiradi:
     1. Kichik harfga o'tkazadi
-    2. Barcha apostroflarni (', `, ʻ, ʼ, ’) bitta standart ' ga keltiradi
+    2. Barcha apostroflarni (', `, ʻ, ʼ, ’) tozalaydi
     3. Krill harflarini lotinga o'giradi
-    4. 'yev' va 'ev', 'yov' va 'ov' farqlarini tekislaydi (masalan Narbayev = Narbaev)
-    5. 'x' va 'h' farqini tekislaydi (masalan Javoxir = Javohir, Xojibayev = Hojibayev)
-    6. Ortiqcha belgilarni tozalaydi
+    4. Familiya qo'shimchalarini bir xillashtiradi:
+       -boyev = -bayev = -boev = -baev
+    5. -yev / -ev / -yov / -ov qo'shimchalarini tekislaydi
+    6. 'o' va 'a' farqlarini tekislaydi (norboyev = narbayev = narboyev = norbaev)
+    7. 'x' va 'h' farqini tekislaydi (xojiboyev = hojibayev)
+    8. 'q' va 'k' farqini tekislaydi
     """
     if not text:
         return ""
     t = text.lower()
     # Apostroflar
-    t = re.sub(r"[`ʻʼ’']", "'", t)
+    t = re.sub(r"[`ʻʼ’']", "", t)
     # Krill -> Lotin
     t = cyrillic_to_latin(t)
-    # Familiya qo'shimchalarini bir xillashtirish (yev/ev, yov/ov)
-    t = re.sub(r"yev\b", "ev", t)
-    t = re.sub(r"yev(?=[^a-z]|$)", "ev", t)
-    t = re.sub(r"yov\b", "ov", t)
-    t = re.sub(r"yov(?=[^a-z]|$)", "ov", t)
-    # x va h ni bitta formatga keltirish
+
+    # Familiya suffikslari (-boyev, -bayev, -boev, -baev)
+    t = re.sub(r"b[oa]y?[eo]v\b", "baev", t)
+    t = re.sub(r"b[oa]y?[eo]v(?=[^a-z]|$)", "baev", t)
+
+    # -yev / -ev / -yov / -ov
+    t = re.sub(r"y?ev\b", "ev", t)
+    t = re.sub(r"y?ev(?=[^a-z]|$)", "ev", t)
+    t = re.sub(r"y?ov\b", "ev", t)
+    t = re.sub(r"y?ov(?=[^a-z]|$)", "ev", t)
+
+    # x va h
     t = t.replace("x", "h")
+
+    # o va a harflari (norboyev = narbayev)
+    t = t.replace("o", "a")
+
+    # q va k harflari
+    t = t.replace("q", "k")
+
     # Probellar
     t = re.sub(r"\s+", " ", t).strip()
     return t
@@ -88,7 +102,6 @@ def calculate_match_score(user: dict, query: str) -> int:
     query_norm = normalize_text(query)
     query_words = query_norm.split()
 
-    # 1. Butun ibora to'liq mos kelsa (masalan 'javohir hojibayev' in 'javohir hojibayev')
     full_target = f"{name_norm} {email_prefix}"
     if query_norm in full_target or query_norm in name_norm:
         return 100
@@ -106,7 +119,7 @@ def calculate_match_score(user: dict, query: str) -> int:
                 matched_this_qw = True
                 break
 
-        # B. Qisqartma yoki qism mosligi (agar kamida 3 belgi bo'lsa)
+        # B. Qisqartma yoki qism mosligi (kamida 3 belgi)
         if not matched_this_qw and len(qw) >= 3:
             for tok in all_tokens:
                 if (qw in tok and len(tok) >= 3) or (tok in qw and len(tok) >= 3):
@@ -117,7 +130,6 @@ def calculate_match_score(user: dict, query: str) -> int:
         # C. Initsial / bosh harf mosligi (masalan 'damir' -> 'd.' yoki 'D')
         if not matched_this_qw and len(qw) >= 2:
             first_char = qw[0]
-            # email 'd.narbaev' yoki ism 'D Narbayev'
             if email_prefix.startswith(f"{first_char}.") or email_prefix.startswith(f"{first_char}_"):
                 score += 15
                 matched_this_qw = True
@@ -128,7 +140,7 @@ def calculate_match_score(user: dict, query: str) -> int:
         if matched_this_qw:
             words_matched += 1
 
-    # Agar barcha qidiruv so'zlari mos kelgan bo'lsa (ham ism, ham familiya)
+    # Barcha so'zlar mos kelgan bo'lsa (ham ism, ham familiya)
     if len(query_words) > 1 and words_matched >= len(query_words):
         score += 40
 
@@ -138,7 +150,6 @@ def calculate_match_score(user: dict, query: str) -> int:
     return 0
 
 def matches_query(target: str, query: str) -> bool:
-    """Yakkama-yakka matn solishtirish uchun yordamchi funksiya"""
     if not target or not query:
         return False
     norm_t = normalize_text(target)
