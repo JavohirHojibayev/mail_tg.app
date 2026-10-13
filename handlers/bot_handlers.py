@@ -142,7 +142,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             f"📊 Tizimda jami: *{users_count}* nafar xodim pochtasi mavjud.\n\n"
             "📋 *Xodimlar ro'yxati:* 10 tadan sahifalangan holda xodimlar nomi va pochtasini ko'rish.\n"
             "🔍 *Tezkor qidiruv:* Xodim ismini lotin yoki krill, katta yoki kichik harflarda yozib yuboring.\n"
-            "_Misol: `Javohir`, `жавоҳир ҳожибаев`, `Zaripov`..._\n\n"
+            "_Misol: `Javohir`, `жавоҳир ҳожибаев`, `Narbayev`, `Бадалов`..._\n\n"
             "Quyidagi menyu tugmalaridan birini tanlang 👇"
         )
         bot.send_message(
@@ -205,7 +205,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             message.chat.id,
             "🔍 Qidirmoqchi bo'lgan xodimning ismini yozing:\n"
             "_(Lotin yoki Krill, katta yoki kichik harflarda yozishingiz mumkin)_\n\n"
-            "Misol: `Javohir`, `жавоҳир ҳожибаев`, `Zaripov`, `Бадалов`...",
+            "Misol: `Javohir`, `жавоҳир ҳожибаев`, `Narbayev`, `Бадалов`...",
             parse_mode="Markdown",
             reply_markup=get_main_keyboard()
         )
