@@ -1,5 +1,7 @@
 import logging
 import json
+import threading
+import time
 from pathlib import Path
 from services.db_service import DBService
 from utils.translit import calculate_match_score
@@ -11,20 +13,32 @@ CACHE_FILE = Path(__file__).resolve().parent.parent / "users_cache.json"
 class DataManager:
     def __init__(self):
         self.db = DBService()
+        self._cached_users = self._load_cache()
+        # Fonda har 5 daqiqada serverdan avtomatik sinxronizatsiya qilish
+        self._start_background_sync()
+
+    def _start_background_sync(self):
+        def sync_worker():
+            # Boshlang'ich kesh yangilash
+            time.sleep(5)
+            self.refresh_from_db()
+
+            while True:
+                time.sleep(300) # Har 5 daqiqada
+                try:
+                    self.refresh_from_db()
+                except Exception as e:
+                    logger.warning(f"Avtomatik server sinxronizatsiya xatosi: {e}")
+
+        sync_thread = threading.Thread(target=sync_worker, daemon=True, name="Server-AutoSync")
+        sync_thread.start()
 
     def get_all_users_raw(self) -> list:
-        """Barcha mavjud xodimlarni Kesh yoki DB dan yig'adi"""
-        cached = self._load_cache()
-        if cached:
-            return cached
-
-        if self.db.is_available():
-            users = self.db.get_users()
-            if users:
-                self._save_cache(users)
-                return users
-
-        return []
+        """Barcha mavjud xodimlarni Kesh yoki xotiradan qaytaradi"""
+        if self._cached_users:
+            return self._cached_users
+        self._cached_users = self._load_cache()
+        return self._cached_users
 
     def get_users(self, search: str = None) -> list:
         """
@@ -60,13 +74,44 @@ class DataManager:
         return [u for score, u in scored_users]
 
     def refresh_from_db(self) -> bool:
-        """Server bazasidan ma'lumotlarni qayta o'qib keshni yangilaydi"""
-        if self.db.is_available():
-            users = self.db.get_users()
-            if users:
-                self._save_cache(users)
-                return True
-        return False
+        """
+        Server bazasidan (iRedAdmin / PostgreSQL) eng so'nggi xodimlarni o'qib
+        avtomatik sinxronizatsiya qiladi.
+        Yangi xodim qo'shilsa yoki ismi o'zgartirilsa, avtomatik yangilanadi.
+        """
+        try:
+            if not self.db.is_available():
+                return False
+            server_users = self.db.get_users()
+            if not server_users:
+                return False
+
+            current_users = self._load_cache()
+            user_map = {u["email"].lower(): u for u in current_users}
+
+            updated_count = 0
+            for su in server_users:
+                em = su.get("email", "").lower()
+                if not em:
+                    continue
+                name = su.get("name", "").strip()
+                if em in user_map:
+                    if name and user_map[em].get("name") != name:
+                        user_map[em]["name"] = name
+                        updated_count += 1
+                else:
+                    user_map[em] = {"name": name or em.split("@")[0], "email": em}
+                    updated_count += 1
+
+            merged_list = list(user_map.values())
+            merged_list.sort(key=lambda x: x.get("name", "").lower())
+            self._cached_users = merged_list
+            self._save_cache(merged_list)
+            logger.info(f"✅ Server sinxronizatsiyasi yakunlandi. Jami: {len(merged_list)} ta xodim (O'zgarishlar: {updated_count})")
+            return True
+        except Exception as e:
+            logger.error(f"refresh_from_db xatosi: {e}")
+            return False
 
     def refresh_cache(self) -> bool:
         return self.refresh_from_db()

@@ -29,3 +29,8 @@ DB_PORT = int(os.getenv("DB_PORT", "5432"))
 DB_NAME = os.getenv("DB_NAME", "vmail")
 DB_USER = os.getenv("DB_USER", "vmailadmin")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+
+# SSH sozlamalari (Server bilan to'g'ridan-to'g'ri xavfsiz sinxronizatsiya uchun)
+SSH_HOST = os.getenv("SSH_HOST", "")
+SSH_USER = os.getenv("SSH_USER", "")
+SSH_PASSWORD = os.getenv("SSH_PASSWORD", "")
