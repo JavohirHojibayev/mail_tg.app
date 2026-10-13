@@ -2,7 +2,7 @@ import logging
 import json
 from pathlib import Path
 from services.db_service import DBService
-from utils.translit import matches_query
+from utils.translit import calculate_match_score
 
 logger = logging.getLogger(__name__)
 
@@ -29,9 +29,10 @@ class DataManager:
     def get_users(self, search: str = None) -> list:
         """
         Xodimlarni qidirish:
+        - Ism + familiya yozilganda ham ism, ham familiya bo'yicha topadi
         - Katta-kichik harf farqsiz (case-insensitive)
         - Lotin va Krill yozuvlariga to'liq moslashgan (transliteratsiya)
-        - x va h almashtirishlariga bardoshli
+        - Eng mos kelgan xodimlar ball bo'yicha yuqorida chiqadi
         """
         all_users = self.get_all_users_raw()
         if not all_users:
@@ -41,17 +42,16 @@ class DataManager:
             return all_users
 
         search_clean = search.strip()
-        matched = []
+        scored_users = []
+
         for u in all_users:
-            name = u.get("name", "")
-            email = u.get("email", "")
+            score = calculate_match_score(u, search_clean)
+            if score >= 20: # Moslik ostonasi
+                scored_users.append((score, u))
 
-            if (matches_query(name, search_clean) or
-                matches_query(email.split("@")[0], search_clean) or
-                matches_query(email, search_clean)):
-                matched.append(u)
-
-        return matched
+        # Moslik darajasi bo'yicha saralash (eng moslari eng birinchi)
+        scored_users.sort(key=lambda x: x[0], reverse=True)
+        return [u for score, u in scored_users]
 
     def refresh_from_db(self) -> bool:
         """Server bazasidan ma'lumotlarni qayta o'qib keshni yangilaydi"""
@@ -63,7 +63,6 @@ class DataManager:
         return False
 
     def refresh_cache(self) -> bool:
-        """Alias for refresh_from_db"""
         return self.refresh_from_db()
 
     def _save_cache(self, users: list):
