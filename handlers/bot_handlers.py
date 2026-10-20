@@ -199,7 +199,7 @@ def save_search_session(chat_id: int, query: str, users: list) -> str:
     USER_LAST_SEARCH[chat_id] = session_data
     return sid
 
-def get_search_session(sid: str, chat_id: int) -> dict:
+def get_search_session(sid: str, chat_id: int) -> dict | None:
     if sid and sid in SEARCH_SESSIONS:
         return SEARCH_SESSIONS[sid]
     if chat_id in USER_LAST_SEARCH:
@@ -275,7 +275,7 @@ def build_search_pagination_text_and_markup(
 
     return text, markup
 
-def send_pdf_document(bot: TeleBot, chat_id: int, users: list, lang: str = "uz", query: str = None):
+def send_pdf_document(bot: TeleBot, chat_id: int, users: list, lang: str = "uz", query: str | None = None):
     wait_msg = bot.send_message(
         chat_id,
         t("pdf_wait", lang),
@@ -1260,8 +1260,9 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 f"💼 *Lavozimi:* {pos}\n"
                 f"📧 *Pochta manzili:* `{email}`\n"
                 f"🌐 *Domen:* `@{domain_display}`\n"
-                f"📞 *Telefon raqami:* `{phone}`\n"
-                f"☎️ *IP telefon:* `{ip}`\n\n"
+                f"📱 *Mobil raqam:* `{phone}`\n"
+                f"🏢 *Ofis raqami:* `{office}`\n"
+                f"☎️ *Ichki raqam:* `{ip}`\n\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                 f"💾 *PostgreSQL bazasi* hamda *Bot kesh*ida ma'lumotlar darhol yangilandi."
             )
