@@ -39,3 +39,9 @@ Desktop.ini
 
 # Foydalanuvchi sozlamalari
 user_preferences.json
+
+# Runtime kesh fayl (bot ishlaganda avtomatik yaratiladi, maxfiy bo'lishi mumkin)
+users_cache.json
+
+# Windows uchun lokal ishga tushirish skripti (serverda kerak emas)
+run_bot.bat

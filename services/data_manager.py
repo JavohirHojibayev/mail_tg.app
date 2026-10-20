@@ -44,7 +44,7 @@ class DataManager:
             self._cached_users = self._load_cache()
             return list(self._cached_users)
 
-    def get_users(self, search: str = None) -> list:
+    def get_users(self, search: str | None = None) -> list:
         """
         Xodimlarni qidirish:
         - Ism + familiya, lavozim, mobil raqam, ofis raqami yoki ichki raqam bo'yicha topadi
@@ -145,7 +145,7 @@ class DataManager:
             logger.warning(f"Kesh o'qishda xatolik: {e}")
             return []
 
-    def get_user_by_email(self, email: str) -> dict:
+    def get_user_by_email(self, email: str) -> dict | None:
         """Berilgan email bo'yicha xodimni topadi"""
         if not email:
             return None
