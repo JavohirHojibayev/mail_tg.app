@@ -83,10 +83,7 @@ def format_tel_link(phone: str) -> str:
     """
     Telefon raqamini bosganda to'g'ridan-to'g'ri telefon terish (dialer/vizov)
     bo'limi ochilishi uchun Markdown tel: havolasi yaratadi.
-    Masalan:
-      '+998 90 933 04 92' -> '[+998 90 933 04 92](tel:+998909330492)'
-      '612-50-18'         -> '[612-50-18](tel:6125018)'
-      '82-01'             -> '[82-01](tel:8201)'
+    Botda telefon va ofis raqamlari probellarsiz ko'rinadi (masalan: +998909330492, 6125018, 612-50-18).
     """
     if not phone:
         return ""
@@ -96,7 +93,8 @@ def format_tel_link(phone: str) -> str:
     digits = re.sub(r'[^\d+]', '', clean)
     if not digits:
         return clean
-    return f"[{clean}](tel:{digits})"
+    display_val = re.sub(r'\s+', '', clean)
+    return f"[{display_val}](tel:{digits})"
 
 def build_pagination_text_and_markup(users: list, page: int, lang: str = "uz", prefix: str = "pg"):
     total_users = len(users)
