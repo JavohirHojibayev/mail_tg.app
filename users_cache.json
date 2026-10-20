@@ -1,506 +1,911 @@
 [
   {
+    "name": "Abduraxmonov Bexzod Ibragimovich",
+    "email": "b.abduraxmonov@uz-potash.uz",
+    "position": "Buxgalter",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Buxgalter",
+    "office_phone": "—"
+  },
+  {
+    "name": "Abrayev Eshbo‘ri Choriyevich",
+    "email": "e.abrayev@uz-potash.uz",
+    "position": "Bosh direktorning o‘rinbosari",
+    "phone": "+998 91 210 63 15",
+    "ip_phone": "—",
+    "raw_info": "Bosh direktorning o‘rinbosari / +998 91 210 63 15",
+    "office_phone": "—"
+  },
+  {
     "name": "Admin",
-    "email": "admin@uz-potash.uz"
+    "email": "admin@uz-potash.uz",
+    "position": "—",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "",
+    "office_phone": "—"
   },
   {
     "name": "Akbarov Jonibek Janon o'g'li",
-    "email": "j.akbarov@uz-potash.uz"
+    "email": "j.akbarov@uz-potash.uz",
+    "position": "Ishlab chiqarishni muvofiklashtirish bo'limi boshlig'i",
+    "phone": "+998916322225",
+    "ip_phone": "—",
+    "raw_info": "Ishlab chiqarishni muvofiklashtirish bo'limi boshlig'i / +998916322225",
+    "office_phone": "—"
   },
   {
-    "name": "Akmal Utanazarov",
-    "email": "a.utanazarov@uz-potash.uz"
+    "name": "Aliyev Artur Shamielevich",
+    "email": "artur-aliyev@uz-potash.uz",
+    "position": "Yuridik bo'lim boshlig'i",
+    "phone": "+998 93 201 70 30",
+    "ip_phone": "—",
+    "raw_info": "Yuridik bo'lim boshlig'i / +998 93 201 70 30",
+    "office_phone": "—"
+  },
+  {
+    "name": "Aliyev Islambek Allanazarovich",
+    "email": "i.aliyev@uz-potash.uz",
+    "position": "ICHATOB xizmati",
+    "phone": "+998 94 594 99 99",
+    "ip_phone": "—",
+    "raw_info": "ICHATOB xizmati / +998 94 594 99 99",
+    "office_phone": "—"
+  },
+  {
+    "name": "Amirova Aygul Riflinovna",
+    "email": "a.riflinovna@uz-potash.uz",
+    "position": "Yetakchi muxandis",
+    "phone": "+7 919 157 3580",
+    "ip_phone": "—",
+    "raw_info": "Yetakchi muxandis / +7 919 157 3580",
+    "office_phone": "—"
   },
   {
     "name": "analitik",
-    "email": "analitik@uz-potash.uz"
+    "email": "analitik@uz-potash.uz",
+    "position": "—",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "",
+    "office_phone": "—"
   },
   {
-    "name": "Asian Chemical Group LLC",
-    "email": "info@acgr.uz"
+    "name": "Aynazarov Abdinabi Abdujjabarovich",
+    "email": "a.aynazarov@uz-potash.uz",
+    "position": "Yoqilg'i-moylash materiallari xizmati boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Yoqilg'i-moylash materiallari xizmati boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "Baxromjon Karayev",
-    "email": "b.karaev@uz-potash.uz"
+    "name": "Azizov Togaynazar Ibrogimovich",
+    "email": "t.azizov@uz-potash.uz",
+    "position": "Obodonlashtirish,bino va inshoatlarga xizmat ko'rsatish bo'limi boshlig'i",
+    "phone": "+998 93 892 37 37",
+    "ip_phone": "—",
+    "raw_info": "Obodonlashtirish,bino va inshoatlarga xizmat ko'rsatish bo'limi boshlig'i / +998 93 892 37 37",
+    "office_phone": "—"
   },
   {
-    "name": "Baxtiyor Mengliyev",
-    "email": "b.mengliyev@uz-potash.uz"
+    "name": "Babayev Kamoliddin Akbarjonovich",
+    "email": "k.babaev@uz-potash.uz",
+    "position": "Bog'dorchilik yordamchi xo'jaligi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Bog'dorchilik yordamchi xo'jaligi boshlig'i",
+    "office_phone": "—"
+  },
+  {
+    "name": "Badalov Alim Eshdavlatovich",
+    "email": "a.badalov@uz-potash.uz",
+    "position": "Uskuna va materiallar ombori mudiri",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Uskuna va materiallar ombori mudiri",
+    "office_phone": "—"
+  },
+  {
+    "name": "Beknazarov Obidjon Fayzulloyevich",
+    "email": "o.beknazarov@uz-potash.uz",
+    "position": "Temir yo'l sexi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Temir yo'l sexi boshlig'i",
+    "office_phone": "—"
   },
   {
     "name": "Bekzod Tojiboyev",
-    "email": "b.tojiboyev@uz-potash.uz"
+    "email": "b.tojiboyev@uz-potash.uz",
+    "position": "achg IT bo'limi xodimi",
+    "phone": "+998933072882",
+    "ip_phone": "—",
+    "raw_info": "achg IT bo'limi xodimi / +998933072882",
+    "office_phone": "—"
   },
   {
-    "name": "Cheslav Yuhnevich",
-    "email": "cheslav.yuhnevich@pgp-project.ru"
+    "name": "Choriyev Dilshod Davlatovich",
+    "email": "d.choriev@uz-potash.uz",
+    "position": "Texnik nazorat bo'limi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Texnik nazorat bo'limi boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "d.narbayev",
-    "email": "d.narbayev@uz-potash.uz"
+    "name": "Choriyev Hamza Abdurahmon o‘g‘li",
+    "email": "h.choriyev@uz-potash.uz",
+    "position": "Bosh buxgalter",
+    "phone": "+998 99 112 49 61",
+    "ip_phone": "—",
+    "raw_info": "Bosh buxgalter / +998 99 112 49 61",
+    "office_phone": "—"
+  },
+  {
+    "name": "Esanov Xusniddin Dushayevich",
+    "email": "x.esanov@uz-potash.uz",
+    "position": "Nazorat bo'limi boshlig'i",
+    "phone": "+998 90 933 04 92",
+    "ip_phone": "—",
+    "raw_info": "Nazorat bo'limi boshlig'i / +998 90 933 04 92",
+    "office_phone": "—"
+  },
+  {
+    "name": "Eshburiyev Nurmamat Umbarovich",
+    "email": "n.eshboriyev@uz-potash.uz",
+    "position": "Kapital qurilish bolimi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Kapital qurilish bolimi boshlig'i",
+    "office_phone": "—"
   },
   {
     "name": "Eshmamatov Suyun Beknazarovich",
-    "email": "s.eshmamatov@uz-potash.uz"
-  },
-  {
-    "name": "Farxod Turdiyev",
-    "email": "pto.turdiyev@uz-potash.uz"
-  },
-  {
-    "name": "Firdavs",
-    "email": "firdavs@acgr.uz"
+    "email": "s.eshmamatov@uz-potash.uz",
+    "position": "Kadrlar bo'yicha muhandis",
+    "phone": "+998 93 420 64 00",
+    "ip_phone": "—",
+    "raw_info": "Kadrlar bo'yicha muhandis / +998 93 420 64 00",
+    "office_phone": "—"
   },
   {
     "name": "Gubayev Azat Salimovich",
-    "email": "a.gubayev@uz-potash.uz"
+    "email": "a.gubayev@uz-potash.uz",
+    "position": "Bosh direktorning o’rinbasari",
+    "phone": "+998 77 640 39 32",
+    "ip_phone": "—",
+    "raw_info": "Bosh direktorning o’rinbasari / +998 77 640 39 32",
+    "office_phone": "—"
   },
   {
-    "name": "Hamza Choriyev",
-    "email": "h.choriyev@uz-potash.uz"
+    "name": "G‘uzarov Nizomiddin Umbarovich",
+    "email": "n.guzarov@uz-potash.uz",
+    "position": "Tikuv sexi boshlig'i",
+    "phone": "+998 90 615 39 64",
+    "ip_phone": "—",
+    "raw_info": "Tikuv sexi boshlig'i / +998 90 615 39 64",
+    "office_phone": "—"
   },
   {
-    "name": "Husanov Azamat",
-    "email": "a.husanov@uz-potash.uz"
+    "name": "Hayitov O‘rol Nu’monovich",
+    "email": "u.hayitov@uz-potash.uz",
+    "position": "Avtotransport sexi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Avtotransport sexi boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "Husanov Azamat",
-    "email": "husanov.a@uz-potash.uz"
+    "name": "Husanov Azamat Eshmamatovich",
+    "email": "a.husanov@uz-potash.uz",
+    "position": "Yuridik maslahatchi",
+    "phone": "+998 77 069 49 59",
+    "ip_phone": "—",
+    "raw_info": "Yuridik maslahatchi / +998 77 069 49 59",
+    "office_phone": "—"
   },
   {
-    "name": "i.aliyev",
-    "email": "i.aliyev@uz-potash.uz"
+    "name": "Husanov Dilshod Tilovmuradovich",
+    "email": "d.husanov@uz-potash.uz",
+    "position": "Yoqilg'idan foydalanish nazorati bo'limi boshlig'i",
+    "phone": "+998 94 218 30 06",
+    "ip_phone": "—",
+    "raw_info": "Yoqilg'idan foydalanish nazorati bo'limi boshlig'i / +998 94 218 30 06",
+    "office_phone": "—"
   },
   {
     "name": "Ibragimov Xusniddin",
-    "email": "ibragimov.x@uz-potash.uz"
+    "email": "x.ibragimov@uz-potash.uz",
+    "position": "Yuridik maslahatchi",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Yuridik maslahatchi",
+    "office_phone": "—"
   },
   {
-    "name": "Ibragimov Xusniddin",
-    "email": "x.ibragimov@uz-potash.uz"
+    "name": "Ildar Muzavirovich Kashfullin",
+    "email": "i.kashfullin@uz-potash.uz",
+    "position": "Bosh muhandis o'rinbosari",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Bosh muhandis o'rinbosari",
+    "office_phone": "—"
   },
   {
-    "name": "import_dkz",
-    "email": "import_dkz@uz-potash.uz"
+    "name": "Import",
+    "email": "import@uz-potash.uz",
+    "position": "Import",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Import",
+    "office_phone": "—"
   },
   {
-    "name": "Info",
-    "email": "info@anticorruption.uz"
+    "name": "Import",
+    "email": "import_dkz@uz-potash.uz",
+    "position": "Import",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Import",
+    "office_phone": "—"
   },
   {
-    "name": "investment",
-    "email": "investment@uz-potash.uz"
+    "name": "Investitsia",
+    "email": "investment@uz-potash.uz",
+    "position": "Investitsia",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Investitsia",
+    "office_phone": "—"
   },
   {
-    "name": "Ismail Tangirov",
-    "email": "kadr@uz-potash.uz"
+    "name": "Ismoilov Kamol Raxmonberdiyevich",
+    "email": "k.ismoilov@uz-potash.uz",
+    "position": "Komplektlash bo'yicha muhandis",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Komplektlash bo'yicha muhandis",
+    "office_phone": "—"
   },
   {
-    "name": "Jamol Yuldashev",
-    "email": "j.yuldashev@uz-potash.uz"
+    "name": "Jabborov Ilhom Amonqulovich",
+    "email": "i.jabborov@uz-potash.uz",
+    "position": "Ishonchlilikni nazorat qilish xizmati boshlig'i",
+    "phone": "+998 99 674 44 56",
+    "ip_phone": "—",
+    "raw_info": "Ishonchlilikni nazorat qilish xizmati boshlig'i / +998 99 674 44 56",
+    "office_phone": "—"
   },
   {
     "name": "Javohir Hojibayev",
-    "email": "j.hojibayev@uz-potash.uz"
+    "email": "j.hojibayev@uz-potash.uz",
+    "position": "Muhandis-dasturchi",
+    "phone": "+998945424121",
+    "ip_phone": "—",
+    "raw_info": "Muhandis-dasturchi  / +998945424121",
+    "office_phone": "—"
   },
   {
-    "name": "Jaylovov Xamid",
-    "email": "info@uz-potash.uz"
+    "name": "Jaylavov Hamid Olimovich",
+    "email": "info@uz-potash.uz",
+    "position": "Devonxona mudiri",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Devonxona mudiri",
+    "office_phone": "—"
+  },
+  {
+    "name": "Jonimkulov Zokir Shaxriyevich",
+    "email": "z.jonimkulov@uz-potash.uz",
+    "position": "Ichki suv ta’minoti va kanalizatsiya uchastkasi",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Ichki suv ta’minoti va kanalizatsiya uchastkasi",
+    "office_phone": "—"
+  },
+  {
+    "name": "Jumanov To‘lqin Maxmatillayevich",
+    "email": "t.jumanov@uz-potash.uz",
+    "position": "Ekologiya va atrof-muhitni muhofaza qilish bo'limi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Ekologiya va atrof-muhitni muhofaza qilish bo'limi boshlig'i",
+    "office_phone": "—"
+  },
+  {
+    "name": "Jumayev Ilxom Kudratovich",
+    "email": "i.jumayev@uz-potash.uz",
+    "position": "TKM bosh muhandisi",
+    "phone": "+998 99 581 64 02",
+    "ip_phone": "—",
+    "raw_info": "TKM bosh muhandisi / +998 99 581 64 02",
+    "office_phone": "—"
+  },
+  {
+    "name": "Jumayev Nurbek Juraqulovich",
+    "email": "akt@uz-potash.uz",
+    "position": "AKT xizmati boshlig'i",
+    "phone": "+998 94 175 86 52",
+    "ip_phone": "—",
+    "raw_info": "AKT xizmati boshlig'i / +998 94 175 86 52",
+    "office_phone": "—"
+  },
+  {
+    "name": "Jumayev Samariddin Ziyadullayevich",
+    "email": "s.jumayev@uz-potash.uz",
+    "position": "Bosh direktorning o'rinbosari",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Bosh direktorning o'rinbosari",
+    "office_phone": "—"
+  },
+  {
+    "name": "Jumayev Sirojiddin Ziyodullayevich",
+    "email": "bosh.mexanik@uz-potash.uz",
+    "position": "Yetakchi muxandis-texnolog",
+    "phone": "+998 99 548 72 26",
+    "ip_phone": "—",
+    "raw_info": "Yetakchi muxandis-texnolog / +998 99 548 72 26",
+    "office_phone": "—"
+  },
+  {
+    "name": "Jurayev Raxmatulla Xolmirzayevich",
+    "email": "r.juraev@uz-potash.uz",
+    "position": "Markaziy zavod laboratoriyasi mudiri",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Markaziy zavod laboratoriyasi mudiri",
+    "office_phone": "—"
   },
   {
     "name": "Kadirov Marat Midxatovich",
-    "email": "m.kadirov@uz-potash.uz"
+    "email": "m.kadirov@uz-potash.uz",
+    "position": "Bosh mexanik",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Bosh mexanik",
+    "office_phone": "—"
+  },
+  {
+    "name": "Kadrlar bo'limi",
+    "email": "kadr@uz-potash.uz",
+    "position": "Kadrlar bo'limi",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Kadrlar bo'limi",
+    "office_phone": "—"
+  },
+  {
+    "name": "Karayev Baxromjon Mamadiyorovich",
+    "email": "b.karaev@uz-potash.uz",
+    "position": "Marksheyderlik va geologiya boshqarmasi boshlig‘i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Marksheyderlik va geologiya boshqarmasi boshlig‘i",
+    "office_phone": "—"
   },
   {
     "name": "Kireev Rustam Rvinavatovich",
-    "email": "kireev@uz-potash.uz"
+    "email": "kireev@uz-potash.uz",
+    "position": "Bosh direktor o'rinbosari",
+    "phone": "+998 95 498 35 38",
+    "ip_phone": "—",
+    "raw_info": "Bosh direktor o'rinbosari / +998 95 498 35 38",
+    "office_phone": "—"
   },
   {
-    "name": "Kostomarov",
-    "email": "kostomarov@acgr.uz"
+    "name": "Lagunov Artur Borisovich",
+    "email": "a.lagunov@uz-potash.uz",
+    "position": "MTT bo'yicha muxandis",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "MTT bo'yicha muxandis",
+    "office_phone": "—"
   },
   {
-    "name": "ksenofontov@acgr.uz",
-    "email": "ksenofontov@acgr.uz"
+    "name": "Latipov Ildar Marsovich",
+    "email": "ildar_latipov@uz-potash.uz",
+    "position": "Mehnat muhofazasi, xavfsizlik texnikasi, sanoat xavfsizligi va ekologiya boshqarma boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Mehnat muhofazasi, xavfsizlik texnikasi, sanoat xavfsizligi va ekologiya boshqarma boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "Mail Delivery System",
-    "email": "mailer-daemon@uz-potash.uz"
+    "name": "Mansurov Suxrobbek Maxammadiyevich",
+    "email": "s.mansurov@uz-potash.uz",
+    "position": "Yoshlar masalalari bo'yicha yetakchi mutaxassis",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Yoshlar masalalari bo'yicha yetakchi mutaxassis",
+    "office_phone": "—"
   },
   {
     "name": "Marifat Tilavova",
-    "email": "m.tilavova@uz-potash.uz"
+    "email": "m.tilavova@uz-potash.uz",
+    "position": "MTT bo'yicha muxandis",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "MTT bo'yicha muxandis",
+    "office_phone": "—"
   },
   {
-    "name": "Marketing",
-    "email": "a.riflinovna@uz-potash.uz"
+    "name": "Marketing bo'limi",
+    "email": "marketing@uz-potash.uz",
+    "position": "Marketing bo'limi",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Marketing bo'limi",
+    "office_phone": "—"
   },
   {
-    "name": "Miraziz Yuldashev",
-    "email": "m.yuldashev@uz-potash.uz"
+    "name": "Maxmadaliyev Rustam Isoqulovich",
+    "email": "r.maxmadaliyev@uz-potash.uz",
+    "position": "NO'A va A xizmati boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "NO'A va A xizmati boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "Mirzayev Muxammad",
-    "email": "m.mirzayev@uz-potash.uz"
+    "name": "Mengliyev Baxtiyor Eshmirzayevich",
+    "email": "b.mengliyev@uz-potash.uz",
+    "position": "MTT bo'yicha muxandis",
+    "phone": "+998 91 225 21 12",
+    "ip_phone": "—",
+    "raw_info": "MTT bo'yicha muxandis / +998 91 225 21 12",
+    "office_phone": "—"
   },
   {
-    "name": "Mirzoxid Soatov",
-    "email": "m.soatov@uz-potash.uz"
+    "name": "Meyliyev Uktam Ulashevich",
+    "email": "u.meyliev@uz-potash.uz",
+    "position": "Komplayens xizmat kursatish boshlig'i",
+    "phone": "+998 70 066 05 00",
+    "ip_phone": "—",
+    "raw_info": "Komplayens xizmat kursatish boshlig'i / +998 70 066 05 00",
+    "office_phone": "—"
+  },
+  {
+    "name": "Mirzayev O‘rol Ravshanovich",
+    "email": "u.mirzayev@uz-potash.uz",
+    "position": "MTT bo'yicha muxandis",
+    "phone": "+998 93 423 57 55",
+    "ip_phone": "—",
+    "raw_info": "MTT bo'yicha muxandis / +998 93 423 57 55",
+    "office_phone": "—"
   },
   {
     "name": "Moddiy texnik ta'minot bo'limi",
-    "email": "omts@uz-potash.uz"
+    "email": "omts@uz-potash.uz",
+    "position": "MTT bo'limi",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "MTT bo'limi",
+    "office_phone": "—"
   },
   {
-    "name": "N Eshbo'Riyev",
-    "email": "n.eshbo'riyev@uz-potash.uz"
+    "name": "Murojaat(Esanov Xusniddin)",
+    "email": "murojaat@uz-potash.uz",
+    "position": "Murojaat(Esanov Xusniddin)",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Murojaat(Esanov Xusniddin)",
+    "office_phone": "—"
+  },
+  {
+    "name": "Muxammadiyev Shavkat Yuldashevich",
+    "email": "sh.muxammadiev@uz-potash.uz",
+    "position": "Import tovarlarni bojxona rasmiylashtiruvi, saqlash va taqsimlash bo‘limi boshlig‘i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Import tovarlarni bojxona rasmiylashtiruvi, saqlash va taqsimlash bo‘limi boshlig‘i",
+    "office_phone": "—"
   },
   {
     "name": "Nabiyev Shodimurod Nurillayevich",
-    "email": "sh.nabiyev@uz-potash.uz"
+    "email": "sh.nabiyev@uz-potash.uz",
+    "position": "Qo'riqlash xizmati boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Qo'riqlash xizmati boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "Nargian1307",
-    "email": "nargian1307@gmail.com"
+    "name": "Narbayev Damir Abatovich",
+    "email": "d.narbayev@uz-potash.uz",
+    "position": "Raqamlashtirish va axborot texnologiyalari bo'limi boshlig'i",
+    "phone": "+998 99 361 43 37",
+    "ip_phone": "—",
+    "raw_info": "Raqamlashtirish va axborot texnologiyalari bo'limi boshlig'i / +998 99 361 43 37",
+    "office_phone": "—"
   },
   {
-    "name": "Nargiza Usmonova",
-    "email": "nazorat@uz-potash.uz"
+    "name": "Narmatov Alisher Xudoyberdiyevich",
+    "email": "a.narmatov@uz-potash.uz",
+    "position": "Elektr sexi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Elektr sexi boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "Normuratov Bahodir",
-    "email": "normuratov@uz-potash.uz"
+    "name": "Nasriddinov Arslanbek Axmadovich",
+    "email": "a.nasrdinov@uz-potash.uz",
+    "position": "MTT bo'yicha muxandis",
+    "phone": "+998 99 831 00 39",
+    "ip_phone": "—",
+    "raw_info": "MTT bo'yicha muxandis / +998 99 831 00 39",
+    "office_phone": "—"
   },
   {
-    "name": "Nurbek Jumayev",
-    "email": "akt@uz-potash.uz"
+    "name": "Nazarov Sherzod Chorshanbiyevich",
+    "email": "sh.narbaev@uz-potash.uz",
+    "position": "Bosh energetika xizmati Yetakchi muhandis",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Bosh energetika xizmati Yetakchi muhandis",
+    "office_phone": "—"
+  },
+  {
+    "name": "Nomozov Baxtiyor Bekkeldiyevich",
+    "email": "b.nomozov@uz-potash.uz",
+    "position": "Zavod markaziy ombori mudiri",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Zavod markaziy ombori mudiri",
+    "office_phone": "—"
+  },
+  {
+    "name": "Normuratov Bahodir Baxtiyorovich",
+    "email": "normuratov@uz-potash.uz",
+    "position": "Tog' kon majmuasi boshlig`i",
+    "phone": "+998 98 775 77 79",
+    "ip_phone": "—",
+    "raw_info": "Tog' kon majmuasi boshlig`i / +998 98 775 77 79",
+    "office_phone": "—"
   },
   {
     "name": "Ochilov Behzod Anvar o'g'li",
-    "email": "b.ochilov@uz-potash.uz"
+    "email": "b.ochilov@uz-potash.uz",
+    "position": "Kadrlar bo'limi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Kadrlar bo'limi boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "Ortikov Malik",
-    "email": "m.ortikov@uz-potash.uz"
+    "name": "Ortikov Malik G‘affarovich",
+    "email": "m.ortikov@uz-potash.uz",
+    "position": "TKM bosh mexanigi",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "TKM bosh mexanigi",
+    "office_phone": "—"
   },
   {
-    "name": "Outsourcing Customer Service",
-    "email": "cs2@hytera.com"
+    "name": "Ostanakulov Alisher Buxarovich",
+    "email": "a.ostanaqulov@uz-potash.uz",
+    "position": "Shartnoma majburiyatlarining bajarilishini nazorat qilish va moliya bo‘limi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Shartnoma majburiyatlarining bajarilishini nazorat qilish va moliya bo‘limi boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "P Matveev",
-    "email": "p.matveev@acgr.uz"
+    "name": "O‘tamurodov Xurshid Fayzullayevich",
+    "email": "x.utamurodov@uz-potash.uz",
+    "position": "Iqtisodiyot bo'limi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Iqtisodiyot bo'limi boshlig'i",
+    "office_phone": "—"
+  },
+  {
+    "name": "Pleskunov Vasiliy Anatolyevich",
+    "email": "pleskunov@uz-potash.uz",
+    "position": "Bosh direktor o‘rinbosari TKM bo‘yicha",
+    "phone": "+998 90 244 10 92",
+    "ip_phone": "—",
+    "raw_info": "Bosh direktor o‘rinbosari TKM bo‘yicha / +998 90 244 10 92",
+    "office_phone": "—"
   },
   {
     "name": "postmaster",
-    "email": "postmaster@uz-potash.uz"
+    "email": "postmaster@uz-potash.uz",
+    "position": "—",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "",
+    "office_phone": "—"
   },
   {
     "name": "Qilichev Nurjahon Said o‘g‘li",
-    "email": "n.qlichov@uz-potash.uz"
+    "email": "n.qlichov@uz-potash.uz",
+    "position": "Yuridik maslahatchi",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Yuridik maslahatchi",
+    "office_phone": "—"
   },
   {
-    "name": "R.Normatov",
-    "email": "import@uz-potash.uz"
+    "name": "Qulnazarov Dilshod Jumayevich",
+    "email": "d.qulnazarov@uz-potash.uz",
+    "position": "MTT bo'yicha yetakchi muxandis",
+    "phone": "+998 95 180 84 00",
+    "ip_phone": "—",
+    "raw_info": "MTT bo'yicha yetakchi muxandis / +998 95 180 84 00",
+    "office_phone": "—"
   },
   {
-    "name": "Rustam Maxmadaliyev",
-    "email": "r.maxmadaliyev@uz-potash.uz"
+    "name": "Raxmatov Baxtiyor Sidiqovich",
+    "email": "b.raxmatov@uz-potash.uz",
+    "position": "Kaliy o'g'iti ishlab chiqarish 2-sexi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Kaliy o'g'iti ishlab chiqarish 2-sexi boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "S.Jumayev",
-    "email": "s.jumayev@uz-potash.uz"
+    "name": "Salimova Zebiniso",
+    "email": "z.salimova@uz-potash.uz",
+    "position": "Ma'naviy-marifiy ishlar samadorligini oshirish va gender tengligi masalalari bo'yicha etakchi mutaxassis",
+    "phone": "+998 90 288 80 00",
+    "ip_phone": "—",
+    "raw_info": "Ma'naviy-marifiy ishlar samadorligini oshirish va gender tengligi masalalari bo'yicha etakchi mutaxassis /+998 90 288 80 00",
+    "office_phone": "—"
   },
   {
-    "name": "Simon Vikhnin",
-    "email": "vikhnin@acgr.uz"
+    "name": "SHermatov Xamidila Abdullayevich",
+    "email": "x.shermatov@uz-potash.uz",
+    "position": "Vakillik rahbari",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Vakillik rahbari",
+    "office_phone": "—"
   },
   {
     "name": "Sirojiddin Badalov",
-    "email": "s.badalov@uz-potash.uz"
+    "email": "s.badalov@uz-potash.uz",
+    "position": "—",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "",
+    "office_phone": "—"
   },
   {
-    "name": "Sirojiddin Jumayev",
-    "email": "bosh.mexanik@uz-potash.uz"
+    "name": "Soatov Mirzoxid Abdishukurovich",
+    "email": "m.soatov@uz-potash.uz",
+    "position": "Yetakchi muxandis-texnolog",
+    "phone": "+998 91 955 56 65",
+    "ip_phone": "—",
+    "raw_info": "Yetakchi muxandis-texnolog / +998 91 955 56 65",
+    "office_phone": "—"
+  },
+  {
+    "name": "Solomov Boxodir Negmatullayevich",
+    "email": "b.solomov@uz-potash.uz",
+    "position": "Ishlar boshqarmasi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Ishlar boshqarmasi boshlig'i",
+    "office_phone": "—"
+  },
+  {
+    "name": "Tangirkulov Xamza Nurxonovich",
+    "email": "x.tangirkulov@uz-potash.uz",
+    "position": "Tibbiyot punkti",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Tibbiyot punkti",
+    "office_phone": "—"
+  },
+  {
+    "name": "Tangirov Ismoil Yokubovich",
+    "email": "i.tangirov@uz-potash.uz",
+    "position": "Nazorat bo'limi Mutaxassis",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Nazorat bo'limi Mutaxassis",
+    "office_phone": "—"
+  },
+  {
+    "name": "Togayev Imomali Jurayevich",
+    "email": "i.togayev@uz-potash.uz",
+    "position": "Ilm-fan va innovatsiyalar bo'limi boshlig'i",
+    "phone": "+998 94 719 65 00",
+    "ip_phone": "—",
+    "raw_info": "Ilm-fan va innovatsiyalar bo'limi boshlig'i /+998 94 719 65 00",
+    "office_phone": "—"
   },
   {
     "name": "Togayev Otabek Bobokulovich",
-    "email": "o.togayev@uz-potash.uz"
+    "email": "o.togayev@uz-potash.uz",
+    "position": "Iqtisodiy xavfsizlik bo'limi mutaxassisi",
+    "phone": "+998 90 243 55 10",
+    "ip_phone": "—",
+    "raw_info": "Iqtisodiy xavfsizlik bo'limi mutaxassisi / +998 90 243 55 10",
+    "office_phone": "—"
   },
   {
-    "name": "Vasiliy Anatolyevich",
-    "email": "pleskunov@uz-potash.uz"
+    "name": "To‘laganov Rashid Akbarovich",
+    "email": "r.tulaganov@uz-potash.uz",
+    "position": "Suv ta'minoti va kanalizasiya sexi",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Suv ta'minoti va kanalizasiya sexi",
+    "office_phone": "—"
   },
   {
-    "name": "X.Esanov",
-    "email": "murojaat@uz-potash.uz"
+    "name": "Turdiyev Farxod Qurbonovich",
+    "email": "pto.turdiyev@uz-potash.uz",
+    "position": "Yetakchi muxandis-texnolog",
+    "phone": "+998 91 640 00 85",
+    "ip_phone": "—",
+    "raw_info": "Yetakchi muxandis-texnolog / +998 91 640 00 85",
+    "office_phone": "—"
   },
   {
-    "name": "Xasan Berdiyev",
-    "email": "marketing@uz-potash.uz"
+    "name": "Turdiyev Kudrat Egamberdiyevich",
+    "email": "k.turdiev@uz-potash.uz",
+    "position": "Suv ta’minoti va kanalizatsiya sexi boshlig‘i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Suv ta’minoti va kanalizatsiya sexi boshlig‘i",
+    "office_phone": "—"
   },
   {
-    "name": "Xusniddin Esanov",
-    "email": "x.esanov@uz-potash.uz"
+    "name": "Turdiyev Kudrat Egamberdiyevich",
+    "email": "x.turdiev@uz-potash.uz",
+    "position": "Suv ta’minoti va kanalizatsiya sexi boshlig‘i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Suv ta’minoti va kanalizatsiya sexi boshlig‘i",
+    "office_phone": "—"
   },
   {
-    "name": "Yuridik bolim",
-    "email": "yurist@uz-potash.uz"
+    "name": "Usmanova Nargiza Mamarasulovna",
+    "email": "nazorat@uz-potash.uz",
+    "position": "Nazorat bo'limi boshlig'i",
+    "phone": "+998 33 234 66 99",
+    "ip_phone": "—",
+    "raw_info": "Nazorat bo'limi boshlig'i / +998 33 234 66 99",
+    "office_phone": "—"
   },
   {
-    "name": "Zaripov",
-    "email": "t.zaripov@uz-potash.uz"
+    "name": "Utanazarov Akmal Bolliyevich",
+    "email": "a.utanazarov@uz-potash.uz",
+    "position": "MTT bo'limi boshlig'i",
+    "phone": "+998 90 288 99 22",
+    "ip_phone": "—",
+    "raw_info": "MTT bo'limi boshlig'i / +998 90 288 99 22",
+    "office_phone": "—"
   },
   {
-    "name": "Абдурахмонов Бехзод Ибрагимович",
-    "email": "b.abduraxmonov@uz-potash.uz"
+    "name": "Xamrayev Ashurali Muxammadiyevich",
+    "email": "a.xamrayev@uz-potash.uz",
+    "position": "Investisiyalarni jalb qilish va investision loyihalarni tadbiq etish bo'limi boshlig'i",
+    "phone": "+998 90 720 48 00",
+    "ip_phone": "—",
+    "raw_info": "Investisiyalarni jalb qilish va investision loyihalarni tadbiq etish bo'limi boshlig'i / +998 90 720 48 00",
+    "office_phone": "—"
   },
   {
-    "name": "Абраев Эшбўри Чориевич",
-    "email": "e.abrayev@uz-potash.uz"
+    "name": "Xasanov Elyor Erkinovich",
+    "email": "e.xasanov@uz-potash.uz",
+    "position": "Sotish bo'yicha muhandis",
+    "phone": "+998 93 937 13 98",
+    "ip_phone": "—",
+    "raw_info": "Sotish bo'yicha muhandis / +998 93 937 13 98",
+    "office_phone": "—"
   },
   {
-    "name": "Азизов Тогайназар Иброгимович",
-    "email": "t.azizov@uz-potash.uz"
+    "name": "Xasanov Muxtor Utanovich",
+    "email": "m.xasanov@uz-potash.uz",
+    "position": "Bosh direktorning o‘rinbosari",
+    "phone": "+998 98 777 96 99",
+    "ip_phone": "—",
+    "raw_info": "Bosh direktorning o‘rinbosari / +998 98 777 96 99",
+    "office_phone": "—"
   },
   {
-    "name": "Айназаров Абдинаби Абдужжабарович",
-    "email": "a.aynazarov@uz-potash.uz"
+    "name": "Xoliqov Baxrom Maxmud o‘g‘li",
+    "email": "b.xolikov@uz-potash.uz",
+    "position": "NO'A va A sexi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "NO'A va A sexi boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "Артур Алиев юрист",
-    "email": "artur-aliyev@uz-potash.uz"
+    "name": "Xolmuratov Shamsitdin Maxmanovich",
+    "email": "sh.xolmuratov@uz-potash.uz",
+    "position": "Texnik bo‘lim boshlig‘i o‘rinbosari",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Texnik bo‘lim boshlig‘i o‘rinbosari",
+    "office_phone": "—"
   },
   {
-    "name": "Ашуров Хасан Абдуқадирович",
-    "email": "x.ashurov@uz-potash.uz"
+    "name": "Xolmurodov Baxrom Safarovich",
+    "email": "b.xolmurodov@uz-potash.uz",
+    "position": "Maxsus ishlar bo'yicha muhandis",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Maxsus ishlar bo'yicha muhandis",
+    "office_phone": "—"
   },
   {
-    "name": "Бабаев Камолиддин Акбаржонович",
-    "email": "k.babaev@uz-potash.uz"
+    "name": "Xudayberdiyev G‘ayrat Alloberdiyevich",
+    "email": "g.xudoyberdiev@uz-potash.uz",
+    "position": "Elektr dvigatellarini to'liq ta'mirlash va qayta o'rash sexi boshlig'i",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Elektr dvigatellarini to'liq ta'mirlash va qayta o'rash sexi boshlig'i",
+    "office_phone": "—"
   },
   {
-    "name": "Бадалов Алим Эшдавлатович",
-    "email": "a.badalov@uz-potash.uz"
+    "name": "Yadgarov Ergash Normuminovich",
+    "email": "e.yadgarov@uz-potash.uz",
+    "position": "Bosh energetik",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Bosh energetik",
+    "office_phone": "—"
   },
   {
-    "name": "Бекназаров Обиджон Файзуллоевич",
-    "email": "o.beknazarov@uz-potash.uz"
+    "name": "Yuldashev Miraziz Xamidovich",
+    "email": "m.yuldashev@uz-potash.uz",
+    "position": "Logistika bo'limi boshlig'i",
+    "phone": "+998 99 852 23 22",
+    "ip_phone": "—",
+    "raw_info": "Logistika bo'limi boshlig'i / +998 99 852 23 22",
+    "office_phone": "—"
   },
   {
-    "name": "Боқиев Санжарбек Ҳусенович",
-    "email": "s.boqiyev@uz-potash.uz"
+    "name": "Yuldasheva Maxzuna Alimjanovna",
+    "email": "m.yuldasheva@uz-potash.uz",
+    "position": "Matbuot xizmati matbuot kotibi",
+    "phone": "+998 99 665 90 09",
+    "ip_phone": "—",
+    "raw_info": "Matbuot xizmati matbuot kotibi / +998 99 665 90 09",
+    "office_phone": "—"
+  },
+  {
+    "name": "Yuldoshov Jamoliddin Qulliyevich",
+    "email": "j.yuldashev@uz-potash.uz",
+    "position": "MTT bo'yicha muxandis",
+    "phone": "+998 90 885 22 44",
+    "ip_phone": "—",
+    "raw_info": "MTT bo'yicha muxandis / +998 90 885 22 44",
+    "office_phone": "—"
+  },
+  {
+    "name": "Yuridik bo'lim",
+    "email": "yurist@uz-potash.uz",
+    "position": "Yuridik bo'lim",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Yuridik bo'lim",
+    "office_phone": "—"
+  },
+  {
+    "name": "Zaripov To‘lqin Ergashevich",
+    "email": "t.zaripov@uz-potash.uz",
+    "position": "Bosh direktor",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "Bosh direktor",
+    "office_phone": "—"
   },
   {
     "name": "Валиуллин Ильгиз Азатович",
-    "email": "i.valiullin@uz-potash.uz"
-  },
-  {
-    "name": "Валиуллин Ильгиз Азатович",
-    "email": "valiullin@acgr.uz"
-  },
-  {
-    "name": "Владимир Комышев",
-    "email": "vladimir.komyshev@acgr.uz"
-  },
-  {
-    "name": "Дилшод Кулназаров",
-    "email": "d.qulnazarov@uz-potash.uz"
-  },
-  {
-    "name": "Жонимкулов Зокир Шахриевич",
-    "email": "z.jonimkulov@uz-potash.uz"
-  },
-  {
-    "name": "Жумаев Илхом  Кудратович",
-    "email": "i.jumayev@uz-potash.uz"
-  },
-  {
-    "name": "Жуманов Тўлқин Махматиллаевич",
-    "email": "t.jumanov@uz-potash.uz"
-  },
-  {
-    "name": "Жураев Рахматулла Холмирзаевич",
-    "email": "r.juraev@uz-potash.uz"
-  },
-  {
-    "name": "Илдар Латипов",
-    "email": "ildar_latipov@uz-potash.uz"
-  },
-  {
-    "name": "Илхом Жабборов",
-    "email": "i.jabborov@uz-potash.uz"
-  },
-  {
-    "name": "Ильдар Музавирович Кашфуллин",
-    "email": "i.kashfullin@uz-potash.uz"
-  },
-  {
-    "name": "Камол Исмоилов",
-    "email": "k.ismoilov@uz-potash.uz"
-  },
-  {
-    "name": "Лагунов Артур Барисович",
-    "email": "a.lagunov@uz-potash.uz"
-  },
-  {
-    "name": "Логунов Артур Барисович",
-    "email": "a.logunov@uz-potash.uz"
-  },
-  {
-    "name": "Мансуров Сухроббек Махаммадиевич",
-    "email": "s.mansurov@uz-potash.uz"
-  },
-  {
-    "name": "Мейлиев Уктам Улашевич",
-    "email": "u.meyliev@uz-potash.uz"
-  },
-  {
-    "name": "Менглиев Бахтиёр Эшмирзаевич",
-    "email": "b.mengliev@uz-potash.uz"
-  },
-  {
-    "name": "Мухаммадиев Шавкат Йулдашевич",
-    "email": "sh.muxammadiev@uz-potash.uz"
-  },
-  {
-    "name": "Нарбаев Шерзод Тухтаевич",
-    "email": "sh.narbaev@uz-potash.uz"
-  },
-  {
-    "name": "Нарматов Алишер Худойбердиевич",
-    "email": "a.narmatov@uz-potash.uz"
-  },
-  {
-    "name": "Насрдинов Арсланбек Ахмадович",
-    "email": "a.nasrdinov@uz-potash.uz"
-  },
-  {
-    "name": "Номозов Бахтиёр Беккелдиевич",
-    "email": "b.nomozov@uz-potash.uz"
-  },
-  {
-    "name": "Норсаидов Рустам",
-    "email": "r.norsaidov@uz-potash.uz"
-  },
-  {
-    "name": "Норсафаров Зафар Мерганович",
-    "email": "z.norsafarov@uz-potash.uz"
-  },
-  {
-    "name": "Останакулов Алишер Бухарович",
-    "email": "a.ostanaqulov@uz-potash.uz"
-  },
-  {
-    "name": "Павел Матвеeв",
-    "email": "matveev.p@acgr.uz"
-  },
-  {
-    "name": "Рахматов Бахтиёр Сидиқович",
-    "email": "b.raxmatov@uz-potash.uz"
-  },
-  {
-    "name": "Салимова Зебинисо",
-    "email": "z.salimova@uz-potash.uz"
-  },
-  {
-    "name": "Соломов Боходир Негматуллаевич",
-    "email": "b.solomov@uz-potash.uz"
-  },
-  {
-    "name": "Тангиркулов Хамза Нурхонович",
-    "email": "x.tangirkulov@uz-potash.uz"
-  },
-  {
-    "name": "Тангиров Исмоил Ёкубович",
-    "email": "i.tangirov@uz-potash.uz"
-  },
-  {
-    "name": "Тогаев Имомали Жураевич",
-    "email": "i.togayev@uz-potash.uz"
-  },
-  {
-    "name": "Турдиев Кудрат Эгамбердиевич",
-    "email": "k.turdiev@uz-potash.uz"
-  },
-  {
-    "name": "Турдиев Хикмат Эгамбердиевич",
-    "email": "x.turdiev@uz-potash.uz"
-  },
-  {
-    "name": "Тўлаганов Рашид Акбарович",
-    "email": "r.tulaganov@uz-potash.uz"
-  },
-  {
-    "name": "Урал Мирзаев",
-    "email": "u.mirzayev@uz-potash.uz"
-  },
-  {
-    "name": "Фирдавс Озодов",
-    "email": "ozodov.f@acgr.uz"
-  },
-  {
-    "name": "Хамраев Ашурали Мухаммадиевич",
-    "email": "a.xamrayev@uz-potash.uz"
-  },
-  {
-    "name": "Хасанов Мухтор Утанович",
-    "email": "m.xasanov@uz-potash.uz"
-  },
-  {
-    "name": "Хасанов Элёр Эркинович",
-    "email": "e.xasanov@uz-potash.uz"
-  },
-  {
-    "name": "Холиков Бахром Махмуд ўғли",
-    "email": "b.xolikov@uz-potash.uz"
-  },
-  {
-    "name": "Холмуратов Шамситдин Махманович",
-    "email": "sh.xolmuratov@uz-potash.uz"
-  },
-  {
-    "name": "Холмуродов Бахром Сафарович",
-    "email": "b.xolmurodov@uz-potash.uz"
-  },
-  {
-    "name": "Худайбердиев Ғайрат Аллобердиевич",
-    "email": "g.xudoyberdiev@uz-potash.uz"
-  },
-  {
-    "name": "Чориев Дилшод Давлатович",
-    "email": "d.choriev@uz-potash.uz"
-  },
-  {
-    "name": "Шерматов Хамидила Абдуллаевич",
-    "email": "x.shermatov@uz-potash.uz"
-  },
-  {
-    "name": "Эшбуриев Нурмуҳаммад Умбарович",
-    "email": "n.eshboriyev@uz-potash.uz"
-  },
-  {
-    "name": "Юлдашева Махзуна Алимжановна",
-    "email": "m.yuldasheva@uz-potash.uz"
-  },
-  {
-    "name": "Ядгаров Эргаш Нормуминович",
-    "email": "e.yadgarov@uz-potash.uz"
-  },
-  {
-    "name": "Ўтамуродов Хуршид Файзуллаевич",
-    "email": "x.utamurodov@uz-potash.uz"
-  },
-  {
-    "name": "Ғузаров Низомиддин Умбарович",
-    "email": "n.guzarov@uz-potash.uz"
-  },
-  {
-    "name": "Ҳайитов Ўрол Нуъмонович",
-    "email": "u.hayitov@uz-potash.uz"
-  },
-  {
-    "name": "Ҳусанов Дилшод Тиловмурадович",
-    "email": "d.husanov@uz-potash.uz"
+    "email": "i.valiullin@uz-potash.uz",
+    "position": "—",
+    "phone": "—",
+    "ip_phone": "—",
+    "raw_info": "",
+    "office_phone": "—"
   }
 ]

@@ -33,6 +33,11 @@ def cyrillic_to_latin(text: str) -> str:
             result.append(CYR_TO_LAT.get(char, char))
     return "".join(result)
 
+# Alias for backward compatibility
+def transliterate(text: str) -> str:
+    """cyrillic_to_latin funksiyasiga havola (alias)"""
+    return cyrillic_to_latin(text)
+
 def normalize_text(text: str) -> str:
     """
     Qidiruv uchun matnni tozalaydi va barcha variantlarni bir xillashtiradi:
@@ -90,20 +95,41 @@ def calculate_match_score(user: dict, query: str) -> int:
 
     name_raw = user.get("name", "")
     email_raw = user.get("email", "")
+    pos_raw = user.get("position", "")
+    phone_raw = user.get("phone", "")
+    office_phone_raw = user.get("office_phone", "")
+    ip_phone_raw = user.get("ip_phone", "")
 
     name_norm = normalize_text(name_raw)
     email_norm = normalize_text(email_raw)
+    pos_norm = normalize_text(pos_raw) if pos_raw and pos_raw != "—" else ""
     email_prefix = email_norm.split("@")[0] if "@" in email_norm else email_norm
 
     target_tokens = set(name_norm.replace(".", " ").replace("_", " ").replace("-", " ").split())
     email_tokens = set(email_prefix.replace(".", " ").replace("_", " ").replace("-", " ").split())
-    all_tokens = target_tokens.union(email_tokens)
+    pos_tokens = set(pos_norm.replace(".", " ").replace("_", " ").replace("-", " ").split()) if pos_norm else set()
+    all_tokens = target_tokens.union(email_tokens).union(pos_tokens)
 
-    query_norm = normalize_text(query)
+    query_clean = query.strip()
+    query_norm = normalize_text(query_clean)
+    query_digits = re.sub(r'\D', '', query_clean)
+
+    # Telefon raqam, ofis raqami yoki ichki raqam bo'yicha qidiruv
+    if len(query_digits) >= 3:
+        user_phone_digits = re.sub(r'\D', '', str(phone_raw))
+        user_office_digits = re.sub(r'\D', '', str(office_phone_raw))
+        user_ip_digits = re.sub(r'\D', '', str(ip_phone_raw))
+        if (
+            (user_phone_digits and query_digits in user_phone_digits)
+            or (user_office_digits and query_digits in user_office_digits)
+            or (user_ip_digits and query_digits in user_ip_digits)
+        ):
+            return 100
+
     query_words = query_norm.split()
 
-    full_target = f"{name_norm} {email_prefix}"
-    if query_norm in full_target or query_norm in name_norm:
+    full_target = f"{name_norm} {email_prefix} {pos_norm}"
+    if query_norm in full_target or query_norm in name_norm or (pos_norm and query_norm in pos_norm):
         return 100
 
     score = 0

@@ -37,3 +37,12 @@ SSH_PASSWORD = os.getenv("SSH_PASSWORD", "")
 
 # Bot Administratori
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "Javohir_Hojibayev")
+
+# iRedAdmin Web sozlamalari (Faqat .env orqali olinadi)
+IREDADMIN_URL = os.getenv("IREDADMIN_URL", "https://mail.uz-potash.uz/iredadmin")
+IREDADMIN_USER = os.getenv("IREDADMIN_USER", "")
+IREDADMIN_PASSWORD = os.getenv("IREDADMIN_PASSWORD", "")
+
+# Xodim ma'lumotlarini o'zgartirish uchun xavfsizlik paroli
+ADMIN_EDIT_PASSWORD = os.getenv("ADMIN_EDIT_PASSWORD", "")
+

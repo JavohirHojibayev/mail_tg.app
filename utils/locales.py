@@ -41,10 +41,10 @@ TEXTS = {
             "Yangi korporativ pochta ochish yoki texnik murojaatlar uchun mas'ul mutaxassislarga bog'laning:\n\n"
             "1. 👑 *Javohir Hojibayev* _(Bosh administrator)_\n"
             "   ✈️ Telegram: [@Javohir_Hojibayev](https://t.me/Javohir_Hojibayev)\n"
-            "   📞 Telefon: `+998 94 542 41 21`\n\n"
+            "   📱 Mobil raqam: `+998 94 542 41 21`\n\n"
             "2. 👤 *Nurbek Jumayev*\n"
             "   ✈️ Telegram: [@nurbekjumayev](https://t.me/nurbekjumayev)\n"
-            "   📞 Telefon: `+998 94 175 86 52`\n\n"
+            "   📱 Mobil raqam: `+998 94 175 86 52`\n\n"
             "🌐 *Rasmiy pochta domeni:* `@uz-potash.uz`"
         ),
         "search_prompt": (
@@ -61,8 +61,12 @@ TEXTS = {
         "btn_results_pdf": "📥 Natijalarni .PDF yuklab olish",
         "user_card": (
             "👤 *F.I.SH:* {name}\n"
-            "📧 *Pochta manzili:* `{email}`\n\n"
-            "👉 _Pochta manzilini nusxalash uchun ustiga bosing: `{email}`_"
+            "💼 *Lavozimi:* {position}\n"
+            "📧 *Pochta manzili:* `{email}`\n"
+            "📱 *Mobil raqam:* `{phone}`\n"
+            "🏢 *Ofis raqami:* `{office_phone}`\n"
+            "☎️ *Ichki raqam:* `{ip_phone}`\n\n"
+            "👉 _Nusxalash uchun kerakli ma'lumot ustiga bosing_"
         ),
         "search_found_single": "✅ *Xodim topildi:*\n\n",
         "search_found_multiple": "🔍 *\"{query}\"* bo'yicha {count} ta xodim topildi:\n\n",
@@ -72,7 +76,7 @@ TEXTS = {
         ),
         "pdf_wait": "⏳ *PDF hujjat tayyorlanmoqda, kuting...*",
         "pdf_caption": (
-            "📄 *DKZ AJ mail xodimlar ro'yxati*\n\n"
+            "📄 *DKZ AJ xodimlar ma'lumotlari*\n\n"
             "👥 Jami: *{count}* nafar xodim\n"
             "🌐 Rasmiy domen: `@uz-potash.uz`"
         ),
@@ -90,6 +94,10 @@ TEXTS = {
         "cmd_start": "🔄 Asosiy menyu",
         "cmd_help": "ℹ️ Yordam va kontaktlar",
         "cmd_lang": "🌐 Tilni tanlash / Выбрать язык",
+        "cmd_sync": "🔄 Serverdan yangilash (Admin)",
+        "sync_wait": "⏳ *Server bilan sinxronizatsiya qilinmoqda, kuting...*",
+        "sync_success": "✅ *Server bilan sinxronizatsiya yakunlandi!*\n📊 Jami xodimlar: *{total}* nafar\n🔄 Yangilanganlar: *{updated}* ta",
+
     },
     "ru": {
         "select_lang_prompt": (
@@ -123,10 +131,10 @@ TEXTS = {
             "Для открытия нового почтового ящика или по техническим вопросам обращайтесь к ответственным специалистам:\n\n"
             "1. 👑 *Javohir Hojibayev* _(Главный администратор)_\n"
             "   ✈️ Telegram: [@Javohir_Hojibayev](https://t.me/Javohir_Hojibayev)\n"
-            "   📞 Телефон: `+998 94 542 41 21`\n\n"
+            "   📱 Мобильный номер: `+998 94 542 41 21`\n\n"
             "2. 👤 *Nurbek Jumayev*\n"
             "   ✈️ Telegram: [@nurbekjumayev](https://t.me/nurbekjumayev)\n"
-            "   📞 Телефон: `+998 94 175 86 52`\n\n"
+            "   📱 Мобильный номер: `+998 94 175 86 52`\n\n"
             "🌐 *Официальный почтовый домен:* `@uz-potash.uz`"
         ),
         "search_prompt": (
@@ -143,8 +151,12 @@ TEXTS = {
         "btn_results_pdf": "📥 Скачать результаты в .PDF",
         "user_card": (
             "👤 *Ф.И.О:* {name}\n"
-            "📧 *Эл. почта:* `{email}`\n\n"
-            "👉 _Нажмите на адрес для копирования: `{email}`_"
+            "💼 *Должность:* {position}\n"
+            "📧 *Эл. почта:* `{email}`\n"
+            "📱 *Мобильный номер:* `{phone}`\n"
+            "🏢 *Офисный номер:* `{office_phone}`\n"
+            "☎️ *Внутренний номер:* `{ip_phone}`\n\n"
+            "👉 _Нажмите на нужное поле для копирования_"
         ),
         "search_found_single": "✅ *Сотрудник найден:*\n\n",
         "search_found_multiple": "🔍 По запросу *\"{query}\"* найдено {count} сотрудников:\n\n",
@@ -154,7 +166,7 @@ TEXTS = {
         ),
         "pdf_wait": "⏳ *PDF документ формируется, пожалуйста подождите...*",
         "pdf_caption": (
-            "📄 *DKZ AJ mail xodimlar ro'yxati*\n\n"
+            "📄 *Информация о сотрудниках АО «ДКЗ»*\n\n"
             "👥 Всего сотрудников: *{count}*\n"
             "🌐 Официальный домен: `@uz-potash.uz`"
         ),
@@ -172,6 +184,9 @@ TEXTS = {
         "cmd_start": "🔄 Главное меню",
         "cmd_help": "ℹ️ Помощь и контакты",
         "cmd_lang": "🌐 Выбрать язык / Tilni tanlash",
+        "cmd_sync": "🔄 Синхронизация с сервером (Админ)",
+        "sync_wait": "⏳ *Выполняется синхронизация с сервером, подождите...*",
+        "sync_success": "✅ *Синхронизация с сервером успешно завершена!*\n📊 Всего сотрудников: *{total}* чел.\n🔄 Обновлено: *{updated}*",
     }
 }
 
