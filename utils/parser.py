@@ -32,26 +32,39 @@ def is_internal_number(val: str) -> bool:
 
 def is_office_number(val: str) -> bool:
     """
-    9 talik ofis raqamlari (masalan: '776152002', '71 598 16 12', '77- 498-62-22', '75 612 50 11')
-    hamda 7 talik shahar raqamlari (masalan: '612 50 11') avtomatik ofis raqami deb tan olinadi.
+    Ofis raqamlari:
+    - +998 bilan yoki (+)siz kiritilgan 71, 75, 77, 78, 70, 72, 73, 74, 76, 79 kodi bilan
+      boshlanuvchi shahar/ofis raqamlari (masalan: '+998 77 xxx xx xx', '+998 75 xxx xx xx',
+      '+998 71 xxx xx xx', '776152002', '71 598 16 12', '77- 498-62-22').
+    - 7 talik shahar raqamlari (masalan: '612 50 11', '612-50-18').
+    - '612' prefiksi mavjud bo'lgan har qanday raqam.
     """
     if not val or not str(val).strip():
         return False
     clean_val = str(val).strip()
-    if clean_val.startswith('+'):
-        return False
     digits = re.sub(r'\D', '', clean_val)
     if not digits:
         return False
-    # 9 xonali barcha ofis raqamlari (+)siz (masalan: 776152002, 71 598 16 12, 77- 498-62-22)
-    if len(digits) == 9:
-        return True
-    # 7 xonali shahar raqamlari (+)siz (masalan: 612 50 11)
-    if len(digits) == 7:
-        return True
-    # 612 ofis prefiksi mavjud bo'lsa
+
+    # 612 prefiksi bo'lsa
     if "612" in digits:
         return True
+
+    # 7 xonali shahar raqamlari (masalan: 612 50 11)
+    if len(digits) == 7 and not clean_val.startswith('+'):
+        return True
+
+    # 12 xonali (+998 bilan) ofis raqami: masalan +998 77 xxx xx xx, +998 75 ..., +998 71 ...
+    if len(digits) == 12 and digits.startswith('998'):
+        nat = digits[3:]
+        if nat.startswith(('7', '6')):
+            return True
+
+    # 9 xonali ofis raqami: masalan 776152002, 71 598 16 12, 77- 498-62-22
+    if len(digits) == 9:
+        if digits.startswith(('7', '6')) or not clean_val.startswith('+'):
+            return True
+
     return False
 
 def normalize_val(val: str, default: str = "—") -> str:
