@@ -143,7 +143,7 @@ def parse_employee_template(text: str) -> dict:
 
     lines = [line.strip() for line in text.strip().splitlines() if line.strip()]
     for line in lines:
-        clean_line = re.sub(r'^[👤💼📧📱🏢📞☎️\*\-_•\s]+', '', line).strip()
+        clean_line = re.sub(r'^[👤💼📧📱🏢📞☎️🟢\*\-_•\s]+', '', line).strip()
         if ':' in clean_line:
             key, val = clean_line.split(':', 1)
             key_lower = key.strip().lower()

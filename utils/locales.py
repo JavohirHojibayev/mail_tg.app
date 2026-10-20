@@ -62,7 +62,7 @@ TEXTS = {
         "user_card": (
             "👤 *F.I.SH:* {name}\n"
             "💼 *Lavozimi:* {position}\n"
-            "📧 *Pochta manzili:* `{email}`\n"
+            "🟢 *Pochta manzili:* `{email}`\n"
             "📱 *Mobil raqam:* {phone}\n"
             "🏢 *Ofis raqami:* {office_phone}\n"
             "☎️ *Ichki raqam:* {ip_phone}\n\n"
@@ -152,7 +152,7 @@ TEXTS = {
         "user_card": (
             "👤 *Ф.И.О:* {name}\n"
             "💼 *Должность:* {position}\n"
-            "📧 *Эл. почта:* `{email}`\n"
+            "🟢 *Эл. почта:* `{email}`\n"
             "📱 *Мобильный номер:* {phone}\n"
             "🏢 *Офисный номер:* {office_phone}\n"
             "☎️ *Внутренний номер:* {ip_phone}\n\n"

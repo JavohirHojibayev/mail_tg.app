@@ -123,7 +123,7 @@ def build_pagination_text_and_markup(users: list, page: int, lang: str = "uz", p
         entry = f"*{idx}.* 👤 *{name}*\n"
         if pos and pos != "—":
             entry += f"     💼 _{pos}_\n"
-        entry += f"     📧 `{email}`\n"
+        entry += f"     🟢 `{email}`\n"
         if phone and phone != "—":
             entry += f"     📱 {format_tel_link(phone)}\n"
         if office_phone and office_phone != "—":
@@ -235,7 +235,7 @@ def build_search_pagination_text_and_markup(
         entry = f"*{idx}.* 👤 *{name}*\n"
         if pos and pos != "—":
             entry += f"     💼 _{pos}_\n"
-        entry += f"     📧 `{email}`\n"
+        entry += f"     🟢 `{email}`\n"
         if phone and phone != "—":
             entry += f"     📱 {format_tel_link(phone)}\n"
         if office_phone and office_phone != "—":
