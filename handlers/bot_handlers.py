@@ -88,8 +88,10 @@ def format_tel_link(phone: str) -> str:
       '612-50-18'         -> '[612-50-18](tel:6125018)'
       '82-01'             -> '[82-01](tel:8201)'
     """
-    if not phone or phone == "—":
-        return phone or "—"
+    if not phone:
+        return ""
+    if phone == "—":
+        return "—"
     clean = str(phone).strip()
     digits = re.sub(r'[^\d+]', '', clean)
     if not digits:
