@@ -1,37 +1,36 @@
-# 📬 UZ-Potash Mail Bot
+# 📬 DKZ Mail Telegram Bot
 
-**UZ-Potash (DKZ AJ)** korporativ pochta xodimlari ma'lumotnomasi va qidiruv tizimi uchun Telegram bot (`@dkzmail_bot`).
+"Dehqonobod Kaliy Zavodi" AJ korporativ pochta foydalanuvchilari ma'lumotnomasi va qidiruv tizimi uchun Telegram boti.
 
 ---
 
 ## ⚡ Asosiy Imkoniyatlar
 
-- 🔍 **Aqlli Qidiruv** — Ism va familiya bo'yicha tezkor qidiruv (Lotin va Krill yozuvlariga to'liq moslashgan).
-- 📄 **PDF Eksport** — Barcha xodimlar va pochta manzillarini rasmiy PDF jadval ko'rinishida yuklab olish.
-- 🌐 **Ko'p Tilli Interfeys** — O'zbek va Rus tillarini qo'llab-quvvatlash (`UZ` / `RU`).
-- 🔄 **Avto-Sinxronizatsiya** — Server bazasi (PostgreSQL / vmail) bilan fonda avtomatik sinxronlash va kesh tizimi.
+- 🔍 **Aqlli Qidiruv** — Xodim F.I.SH, lavozim, pochta, mobil, ofis va ichki raqamlari bo'yicha tezkor qidiruv (Lotin va Kirill alifbolari qo'llab-quvvatlanadi).
+- 📄 **PDF Eksport** — Xodimlar ma'lumotnomasi va qidiruv natijalarini rasmiy PDF jadval shaklida yuklab olish.
+- 🌐 **Ko'p Tilli Interfeys** — O'zbek va Rus tillari (`UZ` / `RU`).
+- 🔄 **Avtomatik Sinxronizatsiya** — Server bazasi (PostgreSQL / vmail) bilan real vaqtda fonda yangilanish va kesh tizimi.
+- 📱 **Tezkor Aloqa** — Telefon raqamlar ustiga bosganda avtomatik terish (dialer) va pochtani bir bosishda nusxalash.
 
 ---
 
-## 🚀 Tezkor Boshlash
+## 🚀 O'rnatish va Ishga Tushirish
 
-### 1. O'rnatish
+### 1. Bog'liqliklarni o'rnatish
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Sozlash
-`.env.example` dan nusxa olib `.env` faylini yarating va kerakli token hamda ulanish parametrlarini kiriting:
+### 2. Muhit parametrlarini sozlash
+`.env.example` namunasidan `.env` faylini yarating va kerakli konfiguratsiya parametrlarini kiriting:
 ```bash
-cp .env.example .env    # Linux
-copy .env.example .env  # Windows
+cp .env.example .env
 ```
 
-### 3. Ishga tushirish
+### 3. Botni ishga tushirish
 ```bash
 python bot.py
 ```
-*(Windows foydalanuvchilari uchun `run_bot.bat` skripti ham mavjud).*
 
 ---
 
@@ -39,15 +38,9 @@ python bot.py
 
 | Buyruq | Tavsif |
 |---|---|
-| `/start` | Botni ishga tushirish va til tanlash |
-| `/list` | Xodimlar ro'yxatini sahifalab ko'rish (10 tadan) |
-| `/search` | Xodim ismi yoki emaili bo'yicha qidiruv |
-| `/pdf` | Xodimlar ro'yxatini PDF formatda yuklab olish |
-| `/lang` | Interfeys tilini almashtirish |
-| `/help` | Texnik yordam va ma'muriyat bilan bog'lanish |
-
----
-
-## 👨‍💻 Ma'muriyat
-Savollar yoki yangi korporativ pochta ochish bo'yicha:
-- **Javohir Hojibayev** — [@Javohir_Hojibayev](https://t.me/Javohir_Hojibayev)
+| `/start` | Botni ishga tushirish va tilni tanlash |
+| `/list` | Xodimlar ro'yxatini sahifalab ko'rish |
+| `/search` | F.I.SH, pochta yoki raqamlar bo'yicha qidiruv |
+| `/pdf` | To'liq ma'lumotnomani PDF formatida yuklab olish |
+| `/lang` | Interfeys tilini o'zgartirish |
+| `/help` | Qo'llanma va yordam |
