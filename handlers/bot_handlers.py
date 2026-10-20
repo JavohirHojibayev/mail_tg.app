@@ -95,15 +95,12 @@ def build_pagination_text_and_markup(users: list, page: int, lang: str = "uz", p
         if pos and pos != "—":
             entry += f"     💼 _{pos}_\n"
         entry += f"     📧 `{email}`\n"
-        contacts = []
         if phone and phone != "—":
-            contacts.append(f"📱 `{phone}`")
+            entry += f"     📱 `{phone}`\n"
         if office_phone and office_phone != "—":
-            contacts.append(f"🏢 `{office_phone}`")
+            entry += f"     🏢 `{office_phone}`\n"
         if ip_phone and ip_phone != "—":
-            contacts.append(f"☎️ `{ip_phone}`")
-        if contacts:
-            entry += f"     {' | '.join(contacts)}\n"
+            entry += f"     ☎️ `{ip_phone}`\n"
         lines.append(entry)
 
     lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -201,15 +198,12 @@ def build_search_pagination_text_and_markup(
         if pos and pos != "—":
             entry += f"     💼 _{pos}_\n"
         entry += f"     📧 `{email}`\n"
-        contacts = []
         if phone and phone != "—":
-            contacts.append(f"📱 `{phone}`")
+            entry += f"     📱 `{phone}`\n"
         if office_phone and office_phone != "—":
-            contacts.append(f"🏢 `{office_phone}`")
+            entry += f"     🏢 `{office_phone}`\n"
         if ip_phone and ip_phone != "—":
-            contacts.append(f"☎️ `{ip_phone}`")
-        if contacts:
-            entry += f"     {' | '.join(contacts)}\n"
+            entry += f"     ☎️ `{ip_phone}`\n"
         lines.append(entry)
 
     lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
