@@ -189,6 +189,9 @@ def parse_employee_template(text: str) -> dict:
     if res['phone'] and is_internal_number(res['phone']) and not res['ip_phone']:
         res['ip_phone'] = res['phone']
         res['phone'] = ""
+    elif res['phone'] and is_office_number(res['phone']) and not res['office_phone']:
+        res['office_phone'] = res['phone']
+        res['phone'] = ""
 
     # Agar email qatorida topilmagan bo'lsa, butun matndan email qidiramiz
     if not res['email']:

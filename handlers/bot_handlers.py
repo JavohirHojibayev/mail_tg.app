@@ -84,7 +84,7 @@ def format_tel_link(phone: str) -> str:
     """
     Telefon raqamini bosganda to'g'ridan-to'g'ri telefon terish (dialer/vizov)
     bo'limi ochilishi uchun Markdown tel: havolasi yaratadi.
-    Botda raqamlar probel va '-' (chiziqcha)larsiz ko'rinadi (masalan: +998909330492, 6125018, 8011).
+    Botda raqamlar probel va '-' (chiziqcha)larsiz ko'rinadi (masalan: +998909330492, 776125011, 8011).
     """
     if not phone:
         return ""
@@ -95,7 +95,10 @@ def format_tel_link(phone: str) -> str:
     if not digits:
         return clean
     display_val = re.sub(r'[\s\-]+', '', clean)
-    return f"[{display_val}](tel:{digits})"
+    dial_digits = digits
+    if len(digits) == 9 and not digits.startswith('+'):
+        dial_digits = f"+998{digits}"
+    return f"[{display_val}](tel:{dial_digits})"
 
 def build_pagination_text_and_markup(users: list, page: int, lang: str = "uz", prefix: str = "pg"):
     total_users = len(users)
@@ -807,7 +810,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             "📋 *YANGI XODIM MA'LUMOTLARI TAYYOR:*\n\n"
             f"👤 *F.I.SH:* {name}\n"
             f"💼 *Lavozimi:* {pos}\n"
-            f"📧 *Pochta manzili:* `{email}`\n"
+            f"🟢 *Pochta manzili:* `{email}`\n"
             f"🌐 *Domen:* `@{domain_display}`\n"
             f"📱 *Mobil raqam:* `{phone}`\n"
             f"🏢 *Ofis raqami:* `{office}`\n"
@@ -1261,7 +1264,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 f"✅ *YANGI XODIM MUVAFFAQIYATLI SAQLANDI!*\n\n"
                 f"👤 *F.I.SH:* {name}\n"
                 f"💼 *Lavozimi:* {pos}\n"
-                f"📧 *Pochta manzili:* `{email}`\n"
+                f"🟢 *Pochta manzili:* `{email}`\n"
                 f"🌐 *Domen:* `@{domain_display}`\n"
                 f"📱 *Mobil raqam:* `{phone}`\n"
                 f"🏢 *Ofis raqami:* `{office}`\n"
