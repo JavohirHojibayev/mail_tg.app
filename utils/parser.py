@@ -17,10 +17,9 @@ import re
 
 def is_internal_number(val: str) -> bool:
     """
-    4 talik yoki 6 talik (hamda 2-6 xonali qisqa) raqamlar avtomatik
-    ichki raqam (IP telefon / ichki ATS) deb tan olinadi.
-    Masalan: '80-58', '8011', '105', '12-34-56', '805812'.
-    Agar raqam '+' bilan boshlansa, bu xalqaro/mobil raqam hisoblanadi.
+    4 talik ichki raqamlar (masalan: '80 10', '80-45', '8011') hamda 2-6 xonali qisqa ATS raqamlari
+    avtomatik ichki raqam (IP telefon / ichki ATS) deb tan olinadi.
+    Agar raqam '+' bilan boshlansa, bu mobil raqam hisoblanadi.
     """
     if not val or not str(val).strip():
         return False
@@ -28,29 +27,30 @@ def is_internal_number(val: str) -> bool:
     if clean_val.startswith('+'):
         return False
     digits = re.sub(r'\D', '', clean_val)
-    # 4 talik va 6 talik (hamda 2-6 ta raqamdan iborat) ichki raqamlar
+    # Ichki raqamlar 4 ta raqamdan (hamda 2-6 xonali) iborat
     return len(digits) in (2, 3, 4, 5, 6)
 
 def is_office_number(val: str) -> bool:
     """
-    7 talik shahar raqamlari (masalan: '612 50 11', '612-50-18') hamda
-    kod qo'shilgan 9 talik ofis raqamlari (masalan: '77 612 50 11', '71 612 50 11')
-    avtomatik ofis raqami deb tan olinadi.
+    9 talik ofis raqamlari (masalan: '776152002', '71 598 16 12', '77- 498-62-22', '75 612 50 11')
+    hamda 7 talik shahar raqamlari (masalan: '612 50 11') avtomatik ofis raqami deb tan olinadi.
     """
     if not val or not str(val).strip():
         return False
     clean_val = str(val).strip()
+    if clean_val.startswith('+'):
+        return False
     digits = re.sub(r'\D', '', clean_val)
     if not digits:
         return False
-    # 612 ofis raqami prefiksi bo'lsa
+    # 9 xonali barcha ofis raqamlari (+)siz (masalan: 776152002, 71 598 16 12, 77- 498-62-22)
+    if len(digits) == 9:
+        return True
+    # 7 xonali shahar raqamlari (+)siz (masalan: 612 50 11)
+    if len(digits) == 7:
+        return True
+    # 612 ofis prefiksi mavjud bo'lsa
     if "612" in digits:
-        return True
-    # 7 xonali shahar raqamlari (+)siz
-    if len(digits) == 7 and not clean_val.startswith('+'):
-        return True
-    # 9 xonali ofis/shahar kodi bilan kiritilgan (77, 71, 75, 78 va h.k.)
-    if len(digits) == 9 and not clean_val.startswith('+') and digits.startswith(('77', '71', '75', '70', '78')):
         return True
     return False
 
@@ -87,53 +87,30 @@ def parse_employee_id(raw_str: str) -> dict:
         }
         
     position = parts[0]
+    nums = list(parts[1:])
     phone = "—"
     office_phone = "—"
     ip_phone = "—"
     
-    if len(parts) == 2:
-        val = parts[1]
-        if is_internal_number(val):
-            # 4 talik yoki 6 talik ichki raqam
-            ip_phone = val
-        elif is_office_number(val):
-            # 7 talik yoki 9 talik ofis raqami (masalan 77 612 50 11 yoki 612 50 11)
-            office_phone = val
-        else:
-            # Mobil raqam
-            phone = val
-
-    elif len(parts) == 3:
-        p1 = parts[1]
-        p2 = parts[2]
-        
-        # 3-qism tekshiriladi: 4 talik yoki 6 talik bo'lsa -> auto ichki raqam!
-        if is_internal_number(p2):
-            ip_phone = p2
-            # 2-qism ofis raqamimi yoki mobil raqam?
-            if is_office_number(p1):
-                office_phone = p1
-            else:
-                phone = p1
-        elif is_office_number(p2):
-            phone = p1
-            office_phone = p2
-        else:
-            phone = p1
-            office_phone = p2
-
-    elif len(parts) >= 4:
-        phone = parts[1]
-        p2 = parts[2]
-        p3 = parts[3]
-        
-        # Agar 3-qism ichki raqam, 4-qism ofis raqami qilib kiritilgan bo'lsa
-        if is_internal_number(p2) and not is_internal_number(p3):
-            office_phone = p3
-            ip_phone = p2
-        else:
-            office_phone = p2
-            ip_phone = p3
+    # 1. Ichki raqamni aniqlash (4 talik yoki 2-6 talik)
+    for n in list(nums):
+        if is_internal_number(n):
+            ip_phone = n
+            nums.remove(n)
+            break
+            
+    # 2. Ofis raqamini aniqlash (9 talik yoki 7 talik (+)siz)
+    for n in list(nums):
+        if is_office_number(n):
+            office_phone = n
+            nums.remove(n)
+            break
+            
+    # 3. Mobil raqamni aniqlash (qolgan raqamlar yoki + bilan boshlanadigan)
+    for n in list(nums):
+        phone = n
+        nums.remove(n)
+        break
         
     return {
         "position": normalize_val(position),
