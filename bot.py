@@ -7,7 +7,7 @@ Bot: @dkzmail_bot
 
 import sys
 import logging
-from telebot import TeleBot
+from telebot import TeleBot  # type: ignore
 import config
 from services.data_manager import DataManager
 from handlers.bot_handlers import register_handlers

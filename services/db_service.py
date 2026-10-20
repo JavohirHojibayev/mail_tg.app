@@ -3,8 +3,8 @@ import re
 import html
 import requests
 import urllib3
-import psycopg2
-from psycopg2.extras import RealDictCursor
+import psycopg2  # type: ignore
+from psycopg2.extras import RealDictCursor  # type: ignore
 import config
 
 logger = logging.getLogger(__name__)

@@ -1,10 +1,20 @@
+import os
+import sys
+from pathlib import Path
+
+# Loyiha ildiz papkasini qidiruv yo'liga qo'shish (Pyrefly va linterlar uchun)
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
 import logging
 import math
 import re
 import time
 import uuid
-from telebot import TeleBot
-from telebot.types import (
+
+from telebot import TeleBot  # type: ignore
+from telebot.types import (  # type: ignore
     Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton,
     InlineKeyboardMarkup, InlineKeyboardButton, BotCommand, BotCommandScopeChat
 )
