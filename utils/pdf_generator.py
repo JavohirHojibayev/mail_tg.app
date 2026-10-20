@@ -1,3 +1,4 @@
+from typing import Any
 import os
 from pathlib import Path
 from reportlab.lib.pagesizes import A4, landscape
@@ -44,7 +45,7 @@ if not font_registered:
     FONT_NAME = 'Times-Roman'
     FONT_NAME_BOLD = 'Times-Bold'
 
-def generate_employees_pdf(users: list, output_path: str = None, title: str = "DKZ AJ xodimlar ma'lumotlari") -> str:
+def generate_employees_pdf(users: list, output_path: str | None = None, title: str = "DKZ AJ xodimlar ma'lumotlari") -> str:
     """
     PDF sarlavhasida berilgan sarlavha va xodim nomi, lavozimi, pochta manzili,
     mobil raqami, ofis raqami hamda ichki raqamidan iborat rasmiy jadval bo'ladi.
@@ -137,7 +138,7 @@ def generate_employees_pdf(users: list, output_path: str = None, title: str = "D
         alignment=1  # Center
     )
 
-    elements = []
+    elements: list[Any] = []
 
     # Sarlavha
     elements.append(Paragraph(title, title_style))

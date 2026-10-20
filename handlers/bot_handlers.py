@@ -12,6 +12,7 @@ import math
 import re
 import time
 import uuid
+from typing import Any
 
 from telebot import TeleBot  # type: ignore
 from telebot.types import (  # type: ignore
@@ -309,9 +310,9 @@ def send_pdf_document(bot: TeleBot, chat_id: int, users: list, lang: str = "uz",
             message_id=wait_msg.message_id
         )
 
-ADMIN_AUTH_SESSIONS = {}
+ADMIN_AUTH_SESSIONS: dict[int, float] = {}
 AUTH_SESSION_LIFETIME = 600  # 10 daqiqa faol seans
-ADMIN_ADD_USER_STATE = {}    # Yangi xodim qo'shish qadamma-qadam seansi
+ADMIN_ADD_USER_STATE: dict[int, dict[str, Any]] = {}    # Yangi xodim qo'shish qadamma-qadam seansi
 
 def is_admin_authenticated(chat_id: int) -> bool:
     """Admin paroli tasdiqlanganligini tekshiradi"""
@@ -364,7 +365,7 @@ def get_user_edit_markup(email: str) -> InlineKeyboardMarkup:
     )
     return markup
 
-def send_user_edit_menu(bot: TeleBot, chat_id: int, user: dict, edit_message_id: int = None):
+def send_user_edit_menu(bot: TeleBot, chat_id: int, user: dict, edit_message_id: int | None = None):
     """Xodim ma'lumotlari kartasi va tahrirlash tugmalarini chiqarish"""
     name = user.get("name") or user.get("email", "").split("@")[0]
     email = user.get("email", "")
@@ -573,7 +574,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     # Admin xavfsizlik paroli va tahrirlash bosqichlari (Next step handlers)
     def handle_admin_auth_step(message: Message, on_success: str):
         user = message.from_user
-        if (user.username or "").lower() != config.ADMIN_USERNAME.lower():
+        if not user or (user.username or "").lower() != config.ADMIN_USERNAME.lower():
             return
         if not message.text:
             return
@@ -641,7 +642,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
 
     def handle_admin_search_step(message: Message):
         user = message.from_user
-        if (user.username or "").lower() != config.ADMIN_USERNAME.lower():
+        if not user or (user.username or "").lower() != config.ADMIN_USERNAME.lower():
             return
         if not message.text:
             return
@@ -771,12 +772,12 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     def send_add_user_confirmation(chat_id: int):
         bot.clear_step_handler_by_chat_id(chat_id)
         st = ADMIN_ADD_USER_STATE.get(chat_id, {})
-        name = st.get("name") or "—"
-        pos = st.get("position") or "—"
-        email = st.get("email") or ""
-        phone = st.get("phone") or "—"
-        office = st.get("office_phone") or "—"
-        ip = st.get("ip_phone") or "—"
+        name: str = str(st.get("name") or "—")
+        pos: str = str(st.get("position") or "—")
+        email: str = str(st.get("email") or "")
+        phone: str = str(st.get("phone") or "—")
+        office: str = str(st.get("office_phone") or "—")
+        ip: str = str(st.get("ip_phone") or "—")
 
         if not email:
             if name != "—":
@@ -823,7 +824,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     def handle_add_user_input(message: Message, step: int):
         chat_id = message.chat.id
         user = message.from_user
-        if (user.username or "").lower() != config.ADMIN_USERNAME.lower():
+        if not user or (user.username or "").lower() != config.ADMIN_USERNAME.lower():
             return
         if not message.text:
             return
@@ -868,7 +869,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             if is_skip:
                 if st.get("name") != "—":
                     from utils.translit import transliterate
-                    clean_name = re.sub(r'[^a-zA-Z0-9\s]', '', transliterate(st.get("name"))).strip()
+                    clean_name = re.sub(r'[^a-zA-Z0-9\s]', '', transliterate(str(st.get("name") or ""))).strip()
                     parts = clean_name.split()
                     prefix = f"{parts[0][0].lower()}.{parts[1].lower()}" if len(parts) >= 2 else (parts[0].lower() if parts else "xodim")
                     st["email"] = f"{prefix}@{getattr(config, 'MAIL_DOMAIN', 'uz-potash.uz')}"
@@ -901,7 +902,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
 
     def handle_admin_update_field(message: Message, email: str, field_type: str):
         user = message.from_user
-        if (user.username or "").lower() != config.ADMIN_USERNAME.lower():
+        if not user or (user.username or "").lower() != config.ADMIN_USERNAME.lower():
             return
         if not message.text:
             return
@@ -987,7 +988,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     @bot.message_handler(commands=['admin'])
     def cmd_admin(message: Message):
         user = message.from_user
-        username = (user.username or "").lower()
+        username = (user.username or "").lower() if user else ""
         target_admin = config.ADMIN_USERNAME.lower()
 
         if username != target_admin:
@@ -1019,8 +1020,12 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     # Callback handler (Til tanlash, Pagination, PDF & Admin)
     @bot.callback_query_handler(func=lambda call: True)
     def handle_callbacks(call: CallbackQuery):
-        data = call.data
-        chat_id = call.message.chat.id
+        if not call.data or not call.message:
+            bot.answer_callback_query(call.id)
+            return
+        data: str = call.data
+        msg = call.message
+        chat_id: int = msg.chat.id
 
         if data == "noop":
             bot.answer_callback_query(call.id)
@@ -1051,7 +1056,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 bot.edit_message_text(
                     admin_text,
                     chat_id=chat_id,
-                    message_id=call.message.message_id,
+                    message_id=msg.message_id,
                     parse_mode="Markdown",
                     reply_markup=get_admin_keyboard(is_auth=is_auth)
                 )
@@ -1082,7 +1087,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 bot.edit_message_text(
                     admin_text,
                     chat_id=chat_id,
-                    message_id=call.message.message_id,
+                    message_id=msg.message_id,
                     parse_mode="Markdown",
                     reply_markup=get_admin_keyboard(is_auth=False)
                 )
@@ -1172,7 +1177,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             elif curr_step == 3:
                 if st.get("name") != "—":
                     from utils.translit import transliterate
-                    clean_name = re.sub(r'[^a-zA-Z0-9\s]', '', transliterate(st.get("name"))).strip()
+                    clean_name = re.sub(r'[^a-zA-Z0-9\s]', '', transliterate(str(st.get("name") or ""))).strip()
                     parts = clean_name.split()
                     prefix = f"{parts[0][0].lower()}.{parts[1].lower()}" if len(parts) >= 2 else (parts[0].lower() if parts else "xodim")
                     st["email"] = f"{prefix}@{getattr(config, 'MAIL_DOMAIN', 'uz-potash.uz')}"
@@ -1199,7 +1204,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             bot.clear_step_handler_by_chat_id(chat_id)
             ADMIN_ADD_USER_STATE.pop(chat_id, None)
             try:
-                bot.delete_message(chat_id, call.message.message_id)
+                bot.delete_message(chat_id, msg.message_id)
             except Exception:
                 pass
             bot.send_message(chat_id, "❌ Yangi xodim qo'shish bekor qilindi.", reply_markup=get_main_keyboard(get_user_lang(chat_id) or "uz"))
@@ -1230,14 +1235,14 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 bot.send_message(chat_id, "⚠️ Ma'lumot topilmadi yoki seans muddati tugadi.")
                 return
 
-            name = st.get("name") or "—"
-            pos = st.get("position") or "—"
-            email = st.get("email")
-            phone = st.get("phone") or "—"
-            office = st.get("office_phone") or "—"
-            ip = st.get("ip_phone") or "—"
+            name = str(st.get("name") or "—")
+            pos = str(st.get("position") or "—")
+            email = str(st.get("email") or "")
+            phone = str(st.get("phone") or "—")
+            office = str(st.get("office_phone") or "—")
+            ip = str(st.get("ip_phone") or "—")
 
-            if name == "—":
+            if name == "—" and email:
                 name = email.split("@")[0]
 
             data_manager.add_or_update_employee(
@@ -1270,7 +1275,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 InlineKeyboardButton("🔙 Admin menyusi", callback_data="admin_menu")
             )
             try:
-                bot.edit_message_text(result_text, chat_id=chat_id, message_id=call.message.message_id, parse_mode="Markdown", reply_markup=markup)
+                bot.edit_message_text(result_text, chat_id=chat_id, message_id=msg.message_id, parse_mode="Markdown", reply_markup=markup)
             except Exception:
                 bot.send_message(chat_id, result_text, parse_mode="Markdown", reply_markup=markup)
             return
@@ -1289,17 +1294,17 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
 
             if not is_admin_authenticated(chat_id):
                 u_name = user.get("name") or email
-                msg = bot.send_message(
+                msg_auth = bot.send_message(
                     chat_id,
                     "🔐 *XAVFSIZLIK TEKSHIRUVI:*\n\n"
                     f"*{u_name}* ma'lumotlarini tahrirlash uchun *xavfsizlik paroli*ni kiriting:\n\n"
                     "❌ Bekor qilish uchun: /cancel",
                     parse_mode="Markdown"
                 )
-                bot.register_next_step_handler(msg, lambda m: handle_admin_auth_step(m, on_success=f"user:{email}"))
+                bot.register_next_step_handler(msg_auth, lambda m: handle_admin_auth_step(m, on_success=f"user:{email}"))
                 return
 
-            send_user_edit_menu(bot, chat_id, user, edit_message_id=call.message.message_id)
+            send_user_edit_menu(bot, chat_id, user, edit_message_id=msg.message_id)
             return
 
         if data.startswith("adm_ed:"):
@@ -1319,12 +1324,12 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
 
             if not is_admin_authenticated(chat_id):
                 bot.answer_callback_query(call.id, "🔐 Parol talab qilinadi!", show_alert=True)
-                msg = bot.send_message(
+                msg_auth = bot.send_message(
                     chat_id,
                     "🔐 *Xavfsizlik paroli talab qilinadi!*\n\nXodim ma'lumotlarini o'zgartirish uchun parolni kiriting:\n\n❌ Bekor qilish: /cancel",
                     parse_mode="Markdown"
                 )
-                bot.register_next_step_handler(msg, lambda m: handle_admin_auth_step(m, on_success=f"user:{email}"))
+                bot.register_next_step_handler(msg_auth, lambda m: handle_admin_auth_step(m, on_success=f"user:{email}"))
                 return
 
             if action == "clear":
@@ -1332,7 +1337,8 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 data_manager.update_user_employee_info(email, "")
                 updated = data_manager.get_user_by_email(email)
                 bot.send_message(chat_id, f"🗑 *{u_name}* ma'lumotlari tozalandi va server bazasida bo'shatildi.", parse_mode="Markdown")
-                send_user_edit_menu(bot, chat_id, updated)
+                if updated:
+                    send_user_edit_menu(bot, chat_id, updated)
                 return
 
             bot.answer_callback_query(call.id)
@@ -1420,7 +1426,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 bot.edit_message_text(
                     text,
                     chat_id=chat_id,
-                    message_id=call.message.message_id,
+                    message_id=msg.message_id,
                     parse_mode="Markdown",
                     reply_markup=markup
                 )
@@ -1452,7 +1458,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                     bot.edit_message_text(
                         text,
                         chat_id=chat_id,
-                        message_id=call.message.message_id,
+                        message_id=msg.message_id,
                         parse_mode="Markdown",
                         reply_markup=markup
                     )
@@ -1479,6 +1485,8 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
     @bot.message_handler(func=lambda m: True)
     def handle_text_search(message: Message):
         chat_id = message.chat.id
+        if not message.text:
+            return
         query = message.text.strip()
         if not query or query.startswith("/"):
             return
@@ -1512,7 +1520,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 InlineKeyboardButton(f"{t('btn_results_pdf', lang)} (1)", callback_data=f"spdf:{sid}")
             )
             # Admin uchun qulay tezkor tahrirlash tugmasi
-            if (message.from_user.username or "").lower() == config.ADMIN_USERNAME.lower():
+            if message.from_user and (message.from_user.username or "").lower() == config.ADMIN_USERNAME.lower():
                 markup.add(
                     InlineKeyboardButton("✏️ Tahrirlash (Admin)", callback_data=f"adm_usr:{user.get('email')}")
                 )

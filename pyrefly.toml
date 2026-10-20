@@ -1,7 +1,6 @@
 search-path = ["."]
 python-version = "3.12"
 python-interpreter-path = "C:\\Users\\hojibayev.j\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
-site-package-paths = ["C:\\Users\\hojibayev.j\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"]
 
 ignore-missing-imports = [
     "telebot",
