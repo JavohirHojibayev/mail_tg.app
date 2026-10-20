@@ -63,10 +63,10 @@ TEXTS = {
             "👤 *F.I.SH:* {name}\n"
             "💼 *Lavozimi:* {position}\n"
             "📧 *Pochta manzili:* `{email}`\n"
-            "📱 *Mobil raqam:* `{phone}`\n"
-            "🏢 *Ofis raqami:* `{office_phone}`\n"
-            "☎️ *Ichki raqam:* `{ip_phone}`\n\n"
-            "👉 _Nusxalash uchun kerakli ma'lumot ustiga bosing_"
+            "📱 *Mobil raqam:* {phone}\n"
+            "🏢 *Ofis raqami:* {office_phone}\n"
+            "☎️ *Ichki raqam:* {ip_phone}\n\n"
+            "👉 _Nusxalash yoki qo'ng'iroq qilish uchun kerakli ma'lumot ustiga bosing_"
         ),
         "search_found_single": "✅ *Xodim topildi:*\n\n",
         "search_found_multiple": "🔍 *\"{query}\"* bo'yicha {count} ta xodim topildi:\n\n",
@@ -153,10 +153,10 @@ TEXTS = {
             "👤 *Ф.И.О:* {name}\n"
             "💼 *Должность:* {position}\n"
             "📧 *Эл. почта:* `{email}`\n"
-            "📱 *Мобильный номер:* `{phone}`\n"
-            "🏢 *Офисный номер:* `{office_phone}`\n"
-            "☎️ *Внутренний номер:* `{ip_phone}`\n\n"
-            "👉 _Нажмите на нужное поле для копирования_"
+            "📱 *Мобильный номер:* {phone}\n"
+            "🏢 *Офисный номер:* {office_phone}\n"
+            "☎️ *Внутренний номер:* {ip_phone}\n\n"
+            "👉 _Нажмите для звонка или копирования_"
         ),
         "search_found_single": "✅ *Сотрудник найден:*\n\n",
         "search_found_multiple": "🔍 По запросу *\"{query}\"* найдено {count} сотрудников:\n\n",

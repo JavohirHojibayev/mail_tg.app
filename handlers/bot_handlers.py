@@ -1,5 +1,6 @@
 import logging
 import math
+import re
 import time
 import uuid
 from telebot import TeleBot
@@ -68,6 +69,23 @@ def update_bot_commands_for_lang(bot: TeleBot, chat_id: int, lang: str):
     except Exception as e:
         logger.warning(f"set_my_commands (chat scope) xatosi: {e}")
 
+def format_tel_link(phone: str) -> str:
+    """
+    Telefon raqamini bosganda to'g'ridan-to'g'ri telefon terish (dialer/vizov)
+    bo'limi ochilishi uchun Markdown tel: havolasi yaratadi.
+    Masalan:
+      '+998 90 933 04 92' -> '[+998 90 933 04 92](tel:+998909330492)'
+      '612-50-18'         -> '[612-50-18](tel:6125018)'
+      '82-01'             -> '[82-01](tel:8201)'
+    """
+    if not phone or phone == "—":
+        return phone or "—"
+    clean = str(phone).strip()
+    digits = re.sub(r'[^\d+]', '', clean)
+    if not digits:
+        return clean
+    return f"[{clean}](tel:{digits})"
+
 def build_pagination_text_and_markup(users: list, page: int, lang: str = "uz", prefix: str = "pg"):
     total_users = len(users)
     total_pages = max(1, math.ceil(total_users / PAGE_SIZE))
@@ -96,11 +114,11 @@ def build_pagination_text_and_markup(users: list, page: int, lang: str = "uz", p
             entry += f"     💼 _{pos}_\n"
         entry += f"     📧 `{email}`\n"
         if phone and phone != "—":
-            entry += f"     📱 `{phone}`\n"
+            entry += f"     📱 {format_tel_link(phone)}\n"
         if office_phone and office_phone != "—":
-            entry += f"     🏢 `{office_phone}`\n"
+            entry += f"     🏢 {format_tel_link(office_phone)}\n"
         if ip_phone and ip_phone != "—":
-            entry += f"     ☎️ `{ip_phone}`\n"
+            entry += f"     ☎️ {format_tel_link(ip_phone)}\n"
         lines.append(entry)
 
     lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -138,7 +156,16 @@ def format_user_card(user: dict, lang: str = "uz") -> str:
     phone = user.get("phone", "—")
     office_phone = user.get("office_phone", "—")
     ip_phone = user.get("ip_phone", "—")
-    return t("user_card", lang, name=name, position=position, email=email, phone=phone, office_phone=office_phone, ip_phone=ip_phone)
+    return t(
+        "user_card",
+        lang,
+        name=name,
+        position=position,
+        email=email,
+        phone=format_tel_link(phone),
+        office_phone=format_tel_link(office_phone),
+        ip_phone=format_tel_link(ip_phone)
+    )
 
 SEARCH_SESSIONS: dict = {}
 USER_LAST_SEARCH: dict = {}
@@ -199,11 +226,11 @@ def build_search_pagination_text_and_markup(
             entry += f"     💼 _{pos}_\n"
         entry += f"     📧 `{email}`\n"
         if phone and phone != "—":
-            entry += f"     📱 `{phone}`\n"
+            entry += f"     📱 {format_tel_link(phone)}\n"
         if office_phone and office_phone != "—":
-            entry += f"     🏢 `{office_phone}`\n"
+            entry += f"     🏢 {format_tel_link(office_phone)}\n"
         if ip_phone and ip_phone != "—":
-            entry += f"     ☎️ `{ip_phone}`\n"
+            entry += f"     ☎️ {format_tel_link(ip_phone)}\n"
         lines.append(entry)
 
     lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
