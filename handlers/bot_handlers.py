@@ -126,7 +126,7 @@ def build_pagination_text_and_markup(users: list, page: int, lang: str = "uz", p
         entry = f"*{idx}.* 👤 *{name}*\n"
         if pos and pos != "—":
             entry += f"     💼 _{pos}_\n"
-        entry += f"     🟢 `{email}`\n"
+        entry += f"     📧 `{email}`\n"
         if phone and phone != "—":
             entry += f"     📱 {format_tel_link(phone)}\n"
         if office_phone and office_phone != "—":
@@ -238,7 +238,7 @@ def build_search_pagination_text_and_markup(
         entry = f"*{idx}.* 👤 *{name}*\n"
         if pos and pos != "—":
             entry += f"     💼 _{pos}_\n"
-        entry += f"     🟢 `{email}`\n"
+        entry += f"     📧 `{email}`\n"
         if phone and phone != "—":
             entry += f"     📱 {format_tel_link(phone)}\n"
         if office_phone and office_phone != "—":
@@ -810,7 +810,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             "📋 *YANGI XODIM MA'LUMOTLARI TAYYOR:*\n\n"
             f"👤 *F.I.SH:* {name}\n"
             f"💼 *Lavozimi:* {pos}\n"
-            f"🟢 *Pochta manzili:* `{email}`\n"
+            f"📧 *Pochta manzili:* `{email}`\n"
             f"🌐 *Domen:* `@{domain_display}`\n"
             f"📱 *Mobil raqam:* `{phone}`\n"
             f"🏢 *Ofis raqami:* `{office}`\n"
@@ -1264,7 +1264,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                 f"✅ *YANGI XODIM MUVAFFAQIYATLI SAQLANDI!*\n\n"
                 f"👤 *F.I.SH:* {name}\n"
                 f"💼 *Lavozimi:* {pos}\n"
-                f"🟢 *Pochta manzili:* `{email}`\n"
+                f"📧 *Pochta manzili:* `{email}`\n"
                 f"🌐 *Domen:* `@{domain_display}`\n"
                 f"📱 *Mobil raqam:* `{phone}`\n"
                 f"🏢 *Ofis raqami:* `{office}`\n"
