@@ -8,7 +8,7 @@ Qo'llab-quvvatlanadigan ajratuvchi belgilar:
 Format:
   Lavozim / Mobil raqam / Ofis raqami / Ichki raqam
 Misollar:
-  - Buxgalter / +998 93399 33 31 / 612 50 11 / 80 11
+  - Buxgalter / +998 93399 33 31 / 77 612 50 11 / 80-11
   - Obodonlashtirish,bino va inshoatlarga xizmat ko'rsatish bo'limi boshlig'i / +998 93 892 37 37 / 80-58
   - Bosh energetik / +998 90 123 45 67 / 105
   - Xodim / 80-58
@@ -30,6 +30,29 @@ def is_internal_number(val: str) -> bool:
     digits = re.sub(r'\D', '', clean_val)
     # 4 talik va 6 talik (hamda 2-6 ta raqamdan iborat) ichki raqamlar
     return len(digits) in (2, 3, 4, 5, 6)
+
+def is_office_number(val: str) -> bool:
+    """
+    7 talik shahar raqamlari (masalan: '612 50 11', '612-50-18') hamda
+    kod qo'shilgan 9 talik ofis raqamlari (masalan: '77 612 50 11', '71 612 50 11')
+    avtomatik ofis raqami deb tan olinadi.
+    """
+    if not val or not str(val).strip():
+        return False
+    clean_val = str(val).strip()
+    digits = re.sub(r'\D', '', clean_val)
+    if not digits:
+        return False
+    # 612 ofis raqami prefiksi bo'lsa
+    if "612" in digits:
+        return True
+    # 7 xonali shahar raqamlari (+)siz
+    if len(digits) == 7 and not clean_val.startswith('+'):
+        return True
+    # 9 xonali ofis/shahar kodi bilan kiritilgan (77, 71, 75, 78 va h.k.)
+    if len(digits) == 9 and not clean_val.startswith('+') and digits.startswith(('77', '71', '75', '70', '78')):
+        return True
+    return False
 
 def normalize_val(val: str, default: str = "—") -> str:
     if not val or not str(val).strip():
@@ -70,12 +93,11 @@ def parse_employee_id(raw_str: str) -> dict:
     
     if len(parts) == 2:
         val = parts[1]
-        digits_only = re.sub(r'\D', '', val)
         if is_internal_number(val):
             # 4 talik yoki 6 talik ichki raqam
             ip_phone = val
-        elif len(digits_only) == 7 and not val.startswith('+'):
-            # 7 talik shahar ofis raqami
+        elif is_office_number(val):
+            # 7 talik yoki 9 talik ofis raqami (masalan 77 612 50 11 yoki 612 50 11)
             office_phone = val
         else:
             # Mobil raqam
@@ -89,13 +111,14 @@ def parse_employee_id(raw_str: str) -> dict:
         if is_internal_number(p2):
             ip_phone = p2
             # 2-qism ofis raqamimi yoki mobil raqam?
-            digits_p1 = re.sub(r'\D', '', p1)
-            if len(digits_p1) == 7 and not p1.startswith('+'):
+            if is_office_number(p1):
                 office_phone = p1
             else:
                 phone = p1
+        elif is_office_number(p2):
+            phone = p1
+            office_phone = p2
         else:
-            # 3-qism 7 xonali yoki boshqa ofis raqami bo'lsa
             phone = p1
             office_phone = p2
 

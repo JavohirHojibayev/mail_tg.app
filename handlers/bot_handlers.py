@@ -750,7 +750,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             text = (
                 "➕ *YANGI XODIM QO'SHISH (5/6)*\n\n"
                 "🏢 *5. Xodimning ofis raqamini kiriting:*\n"
-                "_(Masalan: `612 50 11`)_\n\n"
+                "_(Masalan: `77 612 50 11` yoki `612 50 11`)_\n\n"
                 "💡 _To'ldirish shart emas. O'tkazib yuborish uchun pastdagi tugmani bosing yoki `-` yuboring._"
             )
             msg = bot.send_message(chat_id, text, parse_mode="Markdown", reply_markup=get_wizard_keyboard(can_skip=True))
@@ -1360,7 +1360,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
             elif action == "off":
                 msg = bot.send_message(
                     chat_id,
-                    f"🏢 *{u_name}* uchun yangi *ofis raqami*ni kiriting:\n_(Masalan: 612 50 11)_\n\n❌ Bekor qilish: /cancel",
+                    f"🏢 *{u_name}* uchun yangi *ofis raqami*ni kiriting:\n_(Masalan: 77 612 50 11 yoki 612 50 11)_\n\n❌ Bekor qilish: /cancel",
                     parse_mode="Markdown"
                 )
                 bot.register_next_step_handler(msg, lambda m: handle_admin_update_field(m, email, "off"))
@@ -1377,7 +1377,7 @@ def register_handlers(bot: TeleBot, data_manager: DataManager):
                     f"📝 *{u_name}* uchun ma'lumotlarni bir qatorda kiriting:\n"
                     f"Format: `Lavozim / Mobil raqam / Ofis raqami / Ichki raqam`\n\n"
                     f"_(Ajratish uchun /, @, #, $, % belgilaridan foydalanishingiz mumkin)_\n"
-                    f"Masalan:\n`Buxgalter / +998 93399 33 31 / 612 50 11 / 80 11`\n\n"
+                    f"Masalan:\n`Buxgalter / +998 93399 33 31 / 77 612 50 11 / 80-11`\n\n"
                     f"❌ Bekor qilish: /cancel",
                     parse_mode="Markdown"
                 )
